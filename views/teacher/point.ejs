@@ -1,0 +1,344 @@
+<%- include('../partials/header') %>
+<style>
+    .container{
+        padding: 0 0 0 0;
+    }
+    .bi {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    }
+
+    /*
+    * Sidebar
+    */
+
+    @media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+    .navbar-search {
+        display: block;
+    }
+    }
+
+    .sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    }
+
+    .sidebar .nav-link.active {
+    color: #2470dc;
+    }
+
+    .sidebar-heading {
+    font-size: .75rem;
+    }
+
+    /*
+    * Navbar
+    */
+
+    .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+    padding: .75rem 1rem;
+    }
+    .btn {
+        border: 0;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row" style="min-height: 60vh;">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                    <h6 class="sd-flex justify-content-between align-items-center px-3 mb-1">
+                        <ul class="nav flex-column mb-auto">
+                            <li class="my-1">
+                                Danh sách lớp 
+                            </li>
+                        </ul>
+                    </h6>
+        
+                    <ul class="nav flex-column mb-auto" id="classlist">
+                        <li class="nav-item px-3">
+                            <button style="width: 100%;" type="button" class="btn btn-outline-light text-start px-1" onclick="showStudents(1); selectButton(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backpack4-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a2 2 0 0 0-2 2H3.5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4v.5a.5.5 0 0 0 1 0V7h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2-2m1 2a1 1 0 0 0-2 0zm-4 9v2h6v-2h-1v.5a.5.5 0 0 1-1 0V11z"/>
+                                    <path d="M14 7.599A3 3 0 0 1 12.5 8H9.415a1.5 1.5 0 0 1-2.83 0H3.5A3 3 0 0 1 2 7.599V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                                Lớp .....
+                            </button>
+                        </li>
+                        <li class="nav-item px-3">
+                            <button style="width: 100%;" type="button" class="btn btn-outline-light text-start px-1" onclick="showStudents(2); selectButton(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backpack4-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a2 2 0 0 0-2 2H3.5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4v.5a.5.5 0 0 0 1 0V7h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2-2m1 2a1 1 0 0 0-2 0zm-4 9v2h6v-2h-1v.5a.5.5 0 0 1-1 0V11z"/>
+                                    <path d="M14 7.599A3 3 0 0 1 12.5 8H9.415a1.5 1.5 0 0 1-2.83 0H3.5A3 3 0 0 1 2 7.599V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                                Lớp ......
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+  
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="board" style="display: none">
+            
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" id="subject_name"></h1>
+                <div id="subject_id"></div>
+                <div id="class_id"></div>
+                <div id="number_student"></div>
+            </div>
+            <div class="table-responsive small">
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Học sinh</th>
+                            <th scope="col">MSSV</th>
+                            <th scope="col">Điểm quá trình</th>
+                            <th scope="col">Điểm giữa kỳ</th>
+                            <th scope="col">Điểm cuối lỳ</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="container text-end">
+                <div id="result"></div>
+                <button type="button" class="btn btn-success" style="width: auto;" onclick="submitRegister()">Gửi điểm</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    let currentClass = 1;
+    const studentData = [
+        {
+            'id': 1,
+            'ten': 'Nguyễn Văn A',
+            'MSSV': 1,
+            'QT': 5,
+            'GK': 6,
+            'CK': 1,
+        },
+        {
+            'id': 1,
+            'ten': 'Trần Thị B',
+            'MSSV': 2,
+            'QT': 6,
+            'GK': 7,
+            'CK': 2,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 1,
+            'ten': 'Lê Văn C',
+            'MSSV': 3,
+            'QT': 7,
+            'GK': 8,
+            'CK': 3,
+        },
+        {
+            'id': 2,
+            'ten': ['Nguyễn Văn E', 'Trần Thị R', 'Lê Văn D'],
+            'MSSV': [1, 2, 3],
+            'GK': [6, 7, 8],
+            'CK': [1, 2, 3],
+            'total':[4, 5, 6]
+        }
+    ];
+
+    function showStudents(id) {
+        document.getElementById('result').innerHTML = "";
+        document.getElementById('board').style.display = "";
+        const table = document.getElementById('t1');
+        while (table.rows.length > 1) 
+            table.deleteRow(1);
+        let number = 0;
+        currentClass = id;
+        for(let i = 0; i < studentData.length; i++){
+            if(studentData[i].id == id){
+                let newRow = table.insertRow(-1);
+                let cell0 = newRow.insertCell(0);
+                let cell1 = newRow.insertCell(1);
+                let cell2 = newRow.insertCell(2);
+                let cell3 = newRow.insertCell(3);
+                let cell4 = newRow.insertCell(4);
+                cell0.innerHTML = studentData[i].ten;
+                cell1.innerHTML = studentData[i].MSSV;
+                cell2.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].QT} class="form-control">`);
+                cell3.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].GK} class="form-control">`);
+                cell4.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].CK} class="form-control">`);
+                cell2.classList.add('input-group-sm');
+                cell3.classList.add('input-group-sm');
+                cell4.classList.add('input-group-sm');
+                number++;
+            }
+        }
+        const subject_name = document.getElementById('subject_name');
+        const subject_id = document.getElementById('subject_id');
+        const class_id = document.getElementById('class_id');
+        const number_student = document.getElementById('number_student');
+        subject_name.innerHTML = "Bảng điểm lớp " + id;
+        subject_id.innerHTML = "Mã HP: " + id;
+        class_id.innerHTML = "Mã lớp: " + id;
+        number_student.innerHTML = "Tổng số sinh viên: " + number;
+    }
+    function selectButton(button) {
+
+        let buttons = document.querySelectorAll('#classlist button');
+        
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        button.classList.add('active');
+
+    }
+
+    function submitRegister() {
+        const table = document.getElementById('t1');
+        let dataget = [];
+
+        for (let i = 1; i < table.rows.length; i++) {
+            let cell = [];
+            for(let j = 0; j < 2; j++)
+                cell.push(table.rows[i].cells[j].textContent);
+            for(let j = 2; j < 5; j++)
+                cell.push(table.rows[i].cells[j].querySelector('input').value);
+            dataget.push(cell);
+        }
+
+        const formData = {
+            class_regiter: dataget
+        };
+        fetch('/teacher/give_point', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            data = data.data;
+            document.getElementById('result').innerHTML = "Đã gửi thành công";
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+</script>
+
+<%- include('../partials/footer') %>

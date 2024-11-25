@@ -1,0 +1,200 @@
+<%- include('../partials/header') %>
+<style>
+    .search-box{
+        padding: 0 0 0 0;
+    }
+</style>
+<h2>Các lớp mở</h2>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="table-secondary">
+            <th scope="col">Mã lớp</th>
+            <th scope="col">Mã HP</th>
+            <th scope="col">Tên lớp</th>
+            <th scope="col">Số lượng đăng ký hiện tại</th>
+            <th scope="col">Số lượng đăng ký tối đa</th>
+        </tr>
+        <tr class="table-secondary">
+            <th scope="col" style="padding: 0 0 0 0;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBox0" onkeyup="filterTable(0)">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </th>
+            <th scope="col" style="padding: 0 0 0 0;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBox1" onkeyup="filterTable(1)">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </th>            
+            <th scope="col" style="padding: 0 0 0 0;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBox2" onkeyup="filterTable(2)">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </th>            
+            <th scope="col" style="padding: 0 0 0 0;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBox3" onkeyup="filterTable(3)">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </th>            
+            <th scope="col" style="padding: 0 0 0 0;" onkeyup="filterTable(4)">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBox4">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody id = "myTable">
+        <tr>
+            <th scope="row">151932</th>
+            <td>SSH1151</td>
+            <td>Tư tưởng Hồ Chí Minh</td>
+            <td>50</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Thứ</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Tuần học</th>
+                            <th scope="col">Phòng học</th>
+                            <th scope="col">Mã lớp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>16:00-17:30</td>
+                            <td>2-9,11-18</td>
+                            <td>D9-404</td>
+                            <td>151938</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">151933</th>
+            <td>SSH1152</td>
+            <td>Tư tưởng Hồ Chí Minh</td>
+            <td>50</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Thứ</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Tuần học</th>
+                            <th scope="col">Phòng học</th>
+                            <th scope="col">Mã lớp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>16:00-17:30</td>
+                            <td>2-9,11-18</td>
+                            <td>D9-404</td>
+                            <td>151938</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">151934</th>
+            <td>SSH1151</td>
+            <td>Tư tưởng Hồ Chí Minh</td>
+            <td>50</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Thứ</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Tuần học</th>
+                            <th scope="col">Phòng học</th>
+                            <th scope="col">Mã lớp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>16:00-17:30</td>
+                            <td>2-9,11-18</td>
+                            <td>D9-404</td>
+                            <td>151938</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">151932</th>
+            <td>SSH1154</td>
+            <td>Tư tưởng Hồ Chí Minh</td>
+            <td>50</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Thứ</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Tuần học</th>
+                            <th scope="col">Phòng học</th>
+                            <th scope="col">Mã lớp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>16:00-17:30</td>
+                            <td>2-9,11-18</td>
+                            <td>D9-404</td>
+                            <td>151938</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+
+function filterTable(collum) {
+    const input = document.getElementById(`searchBox${collum}`).value.toLowerCase();
+    const rows = document.querySelectorAll('#myTable > tr');
+
+    for (let i = 0; i < rows.length; i+=2) {
+        const cells = rows[i].querySelectorAll('th, td');
+        console.log(cells[collum].textContent);
+        const cellValue = cells[collum].textContent || cells[collum].innerText;
+
+        if (cellValue.toLowerCase().indexOf(input) > -1) {
+            rows[i].style.display = '';
+            rows[i+1].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+            rows[i+1].style.display = 'none';
+        }
+    }
+}
+</script>
+
+<%- include('../partials/footer') %>

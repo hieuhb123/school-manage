@@ -1,0 +1,378 @@
+<%- include('../partials/header') %>
+<style>
+    .container{
+        padding: 0 0 0 0;
+    }
+    .bi {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    }
+
+    /*
+    * Sidebar
+    */
+
+    @media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+    .navbar-search {
+        display: block;
+    }
+    }
+
+    .sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    }
+
+    .sidebar .nav-link.active {
+    color: #2470dc;
+    }
+
+    .sidebar-heading {
+    font-size: .75rem;
+    }
+
+    /*
+    * Navbar
+    */
+
+    .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+    padding: .75rem 1rem;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-body-secondary">
+                        <ul class="nav flex-column mb-auto">
+                            <li class="my-1">
+                                Mã sinh viên: <span class="fw-bold">.....</span>
+                            </li>
+                            <li class="my-1">
+                                Họ tên sinh viên: <span class="fw-bold">.....</span>
+                            </li>
+                            <li class="my-1">
+                                Lớp: <span class="fw-bold">.....</span>
+                            </li>
+                            <li class="my-1">
+                                Chương trình: <span class="fw-bold">.....</span>
+                            </li>
+                            <li class="my-1">
+                                Số tín chỉ tối đa: <span class="fw-bold">.....</span>
+                            </li>
+                        </ul>
+                    </h6>
+        
+                    <hr class="my-3">
+        
+                    <ul class="nav flex-column mb-auto">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="/student/register-class/class-open">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                </svg>
+                                Danh sách lớp mở
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+  
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Trang đăng ký học tập</h1>
+                <form class="row row-cols-lg-auto g-3 align-items-center">
+                    <div class="col-12">
+                      <label class="visually-hidden" for="inlineFormInputGroupUsername">Username</label>
+                      <div class="input-group">
+                        <div class="input-group-text">Nhập mã lớp</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="class number">
+                      </div>
+                    </div>      
+                    <div class="col-12">
+                      <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <p id="status"></p>
+            <div class="table-responsive small">
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Mã lớp</th>
+                            <th scope="col">Tên lớp</th>
+                            <th scope="col">Mã HP</th>
+                            <th scope="col">Trạng thái ĐK</th>
+                            <th scope="col">TC</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1,005</td>
+                        <td>dashboard</td>
+                        <td>irrelevant</td>
+                        <td>text</td>
+                        <td>placeholder</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>1,006</td>
+                        <td>dashboard</td>
+                        <td>illustrative</td>
+                        <td>rich</td>
+                        <td>data</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,007</td>
+                        <td>placeholder</td>
+                        <td>tabular</td>
+                        <td>information</td>
+                        <td>irrelevant</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,008</td>
+                        <td>random</td>
+                        <td>data</td>
+                        <td>placeholder</td>
+                        <td>text</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,009</td>
+                        <td>placeholder</td>
+                        <td>irrelevant</td>
+                        <td>visual</td>
+                        <td>layout</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,010</td>
+                        <td>data</td>
+                        <td>rich</td>
+                        <td>dashboard</td>
+                        <td>tabular</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,011</td>
+                        <td>information</td>
+                        <td>placeholder</td>
+                        <td>illustrative</td>
+                        <td>data</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,012</td>
+                        <td>text</td>
+                        <td>placeholder</td>
+                        <td>layout</td>
+                        <td>dashboard</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,013</td>
+                        <td>dashboard</td>
+                        <td>irrelevant</td>
+                        <td>text</td>
+                        <td>visual</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,014</td>
+                        <td>dashboard</td>
+                        <td>illustrative</td>
+                        <td>rich</td>
+                        <td>data</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    </tr>
+                    <tr>
+                        <td>1,015</td>
+                        <td>random</td>
+                        <td>tabular</td>
+                        <td>information</td>
+                        <td>text</td>
+                        <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-end">Số tín chỉ đăng ký:</td>
+                        <td style="box-shadow: 0 0 0 0;"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="container text-end">
+                <button type="button" class="btn btn-danger" style="width: auto;" onclick="removeSelectedRows()">Xóa các lớp chọn</button>
+            </div>
+            
+            <div class="container text-center">
+                <p>Thời khóa biểu đăng ký</p>
+                <div class="table-responsive small">
+                    <table class="table table-striped-columns table-sm mb-0">
+                        <thead>
+                            <tr class="table-info">
+                                <th scope="col">Thứ</th>
+                                <th scope="col">Thời gian</th>
+                                <th scope="col">Tuần học</th>
+                                <th scope="col">Phòng học</th>
+                                <th scope="col">Lớp học</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1,005</td>
+                            <td>dashboard</td>
+                            <td>irrelevant</td>
+                            <td>text</td>
+                            <td>placeholder</td>
+                        </tr>
+                        <tr>
+                            <td>1,006</td>
+                            <td>dashboard</td>
+                            <td>illustrative</td>
+                            <td>rich</td>
+                            <td>data</td>
+                        </tr>
+                        <tr>
+                            <td>1,007</td>
+                            <td>placeholder</td>
+                            <td>tabular</td>
+                            <td>information</td>
+                            <td>irrelevant</td>
+                        </tr>
+                        <tr>
+                            <td>1,008</td>
+                            <td>random</td>
+                            <td>data</td>
+                            <td>placeholder</td>
+                            <td>text</td>
+                        </tr>
+                        <tr>
+                            <td>1,009</td>
+                            <td>placeholder</td>
+                            <td>irrelevant</td>
+                            <td>visual</td>
+                            <td>layout</td>
+                        </tr>
+                        <tr>
+                            <td>1,010</td>
+                            <td>data</td>
+                            <td>rich</td>
+                            <td>dashboard</td>
+                            <td>tabular</td>
+                        </tr>
+                        <tr>
+                            <td>1,011</td>
+                            <td>information</td>
+                            <td>placeholder</td>
+                            <td>illustrative</td>
+                            <td>data</td>
+                        </tr>
+                        <tr>
+                            <td>1,012</td>
+                            <td>text</td>
+                            <td>placeholder</td>
+                            <td>layout</td>
+                            <td>dashboard</td>
+                        </tr>
+                        <tr>
+                            <td>1,013</td>
+                            <td>dashboard</td>
+                            <td>irrelevant</td>
+                            <td>text</td>
+                            <td>visual</td>
+                        </tr>
+                        <tr>
+                            <td>1,014</td>
+                            <td>dashboard</td>
+                            <td>illustrative</td>
+                            <td>rich</td>
+                            <td>data</td>
+                        </tr>
+                        <tr>
+                            <td>1,015</td>
+                            <td>random</td>
+                            <td>tabular</td>
+                            <td>information</td>
+                            <td>text</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="container text-center my-5">
+                <button type="button" onclick="submitRegister()" class="btn btn-success" style="width: auto;">Gửi đăng ký</button>
+            </div>
+            <p id="result"></p>
+        </main>
+    </div>
+</div>
+
+<script>
+
+    function removeSelectedRows() {
+        // Lấy tất cả các checkbox được tick trong bảng
+        const checkboxes = document.querySelectorAll('#t1 input[type="checkbox"]:checked');
+        
+        checkboxes.forEach(checkboxe => {
+            checkboxe.closest('tr').remove();
+        });
+    }
+
+    function submitRegister() {
+        const table = document.getElementById('t1');
+        let dataget = [];
+
+        for (let i = 1; i < table.rows.length-1; i++) {
+            const cell = table.rows[i].cells[0].textContent;
+            dataget.push(cell);
+        }
+
+        const formData = {
+            class_regiter: dataget
+        };
+        document.getElementById('result').textContent = 'Đã gửi thành công';
+        fetch('/student/submitRegister', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            data = data.data;
+            console.log(data); // Xử lý dữ liệu trả về
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+</script>
+
+<%- include('../partials/footer') %>
