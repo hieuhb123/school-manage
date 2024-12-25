@@ -62,19 +62,16 @@
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-body-secondary">
                         <ul class="nav flex-column mb-auto">
                             <li class="my-1">
-                                Mã sinh viên: <span class="fw-bold">.....</span>
+                                Mã sinh viên: <span class="fw-bold"><%=user.student_id%></span>
                             </li>
                             <li class="my-1">
-                                Họ tên sinh viên: <span class="fw-bold">.....</span>
+                                Họ tên sinh viên: <span class="fw-bold"><%=user.student_name%></span>
                             </li>
                             <li class="my-1">
-                                Lớp: <span class="fw-bold">.....</span>
+                                Lớp: <span class="fw-bold"><%=user.major%></span>
                             </li>
                             <li class="my-1">
-                                Chương trình: <span class="fw-bold">.....</span>
-                            </li>
-                            <li class="my-1">
-                                Số tín chỉ tối đa: <span class="fw-bold">.....</span>
+                                Chương trình: <span class="fw-bold"><%=user.institute_id%></span>
                             </li>
                         </ul>
                     </h6>
@@ -104,13 +101,14 @@
                       <label class="visually-hidden" for="inlineFormInputGroupUsername">Username</label>
                       <div class="input-group">
                         <div class="input-group-text">Nhập mã lớp</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="class number">
+                        <input type="text" class="form-control" id="input_class" placeholder="class number">
                       </div>
                     </div>      
                     <div class="col-12">
-                      <button type="button" class="btn btn-primary">Submit</button>
+                      <button type="button" class="btn btn-primary" onclick="insertClass()">Submit</button>
                     </div>
                 </form>
+                <div id="status_class"></div>
             </div>
             <p id="status"></p>
             <div class="table-responsive small">
@@ -125,95 +123,17 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1,005</td>
-                        <td>dashboard</td>
-                        <td>irrelevant</td>
-                        <td>text</td>
-                        <td>placeholder</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>dashboard</td>
-                        <td>illustrative</td>
-                        <td>rich</td>
-                        <td>data</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>placeholder</td>
-                        <td>tabular</td>
-                        <td>information</td>
-                        <td>irrelevant</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>random</td>
-                        <td>data</td>
-                        <td>placeholder</td>
-                        <td>text</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>placeholder</td>
-                        <td>irrelevant</td>
-                        <td>visual</td>
-                        <td>layout</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>data</td>
-                        <td>rich</td>
-                        <td>dashboard</td>
-                        <td>tabular</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>information</td>
-                        <td>placeholder</td>
-                        <td>illustrative</td>
-                        <td>data</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>text</td>
-                        <td>placeholder</td>
-                        <td>layout</td>
-                        <td>dashboard</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>dashboard</td>
-                        <td>irrelevant</td>
-                        <td>text</td>
-                        <td>visual</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>dashboard</td>
-                        <td>illustrative</td>
-                        <td>rich</td>
-                        <td>data</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>random</td>
-                        <td>tabular</td>
-                        <td>information</td>
-                        <td>text</td>
-                        <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                    </tr>
+                    <tbody id="t1_body">
+                    <%for(let i = 0 ; i < class_rg.length ; i++) {%>
+                        <tr>
+                            <td><%=class_rg[i].clazz_id%></td>
+                            <td><%=class_rg[i].subject_name%></td>
+                            <td><%=class_rg[i].subject_id%></td>
+                            <td><%=class_rg[i].status%></td>
+                            <td><%=class_rg[i].credit%></td>
+                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                        </tr>
+                    <%}%>
                     <tr>
                         <td colspan="5" class="text-end">Số tín chỉ đăng ký:</td>
                         <td style="box-shadow: 0 0 0 0;"></td>
@@ -228,94 +148,24 @@
             <div class="container text-center">
                 <p>Thời khóa biểu đăng ký</p>
                 <div class="table-responsive small">
-                    <table class="table table-striped-columns table-sm mb-0">
+                    <table id="t2" class="table table-striped-columns table-sm mb-0">
                         <thead>
                             <tr class="table-info">
                                 <th scope="col">Thứ</th>
                                 <th scope="col">Thời gian</th>
-                                <th scope="col">Tuần học</th>
                                 <th scope="col">Phòng học</th>
                                 <th scope="col">Lớp học</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>1,005</td>
-                            <td>dashboard</td>
-                            <td>irrelevant</td>
-                            <td>text</td>
-                            <td>placeholder</td>
-                        </tr>
-                        <tr>
-                            <td>1,006</td>
-                            <td>dashboard</td>
-                            <td>illustrative</td>
-                            <td>rich</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,007</td>
-                            <td>placeholder</td>
-                            <td>tabular</td>
-                            <td>information</td>
-                            <td>irrelevant</td>
-                        </tr>
-                        <tr>
-                            <td>1,008</td>
-                            <td>random</td>
-                            <td>data</td>
-                            <td>placeholder</td>
-                            <td>text</td>
-                        </tr>
-                        <tr>
-                            <td>1,009</td>
-                            <td>placeholder</td>
-                            <td>irrelevant</td>
-                            <td>visual</td>
-                            <td>layout</td>
-                        </tr>
-                        <tr>
-                            <td>1,010</td>
-                            <td>data</td>
-                            <td>rich</td>
-                            <td>dashboard</td>
-                            <td>tabular</td>
-                        </tr>
-                        <tr>
-                            <td>1,011</td>
-                            <td>information</td>
-                            <td>placeholder</td>
-                            <td>illustrative</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,012</td>
-                            <td>text</td>
-                            <td>placeholder</td>
-                            <td>layout</td>
-                            <td>dashboard</td>
-                        </tr>
-                        <tr>
-                            <td>1,013</td>
-                            <td>dashboard</td>
-                            <td>irrelevant</td>
-                            <td>text</td>
-                            <td>visual</td>
-                        </tr>
-                        <tr>
-                            <td>1,014</td>
-                            <td>dashboard</td>
-                            <td>illustrative</td>
-                            <td>rich</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,015</td>
-                            <td>random</td>
-                            <td>tabular</td>
-                            <td>information</td>
-                            <td>text</td>
-                        </tr>
+                        <tbody id="t2_body">
+                        <%for(let i = 0 ; i < class_rg.length ; i++) {%>
+                            <tr>
+                                <td><%=class_rg[i].dow%></td>
+                                <td><%=class_rg[i].start_time + '-' + class_rg[i].finish_time%></td>
+                                <td><%=class_rg[i].room%></td>
+                                <td><%=class_rg[i].clazz_id%></td>
+                            </tr>
+                        <%}%>
                         </tbody>
                     </table>
                 </div>
@@ -335,7 +185,7 @@
         const checkboxes = document.querySelectorAll('#t1 input[type="checkbox"]:checked');
         
         checkboxes.forEach(checkboxe => {
-            checkboxe.closest('tr').remove();
+            checkboxe.closest('tr').cells[3].textContent = "Delete";
         });
     }
 
@@ -344,7 +194,10 @@
         let dataget = [];
 
         for (let i = 1; i < table.rows.length-1; i++) {
-            const cell = table.rows[i].cells[0].textContent;
+            const cell = {
+                class_id: table.rows[i].cells[0].textContent,
+                status: table.rows[i].cells[3].textContent
+            };
             dataget.push(cell);
         }
 
@@ -353,6 +206,55 @@
         };
         document.getElementById('result').textContent = 'Đã gửi thành công';
         fetch('/student/submitRegister', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataget)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            const table1 = document.getElementById("t1");
+            const table2 = document.getElementById("t2");
+            for(let i = 0; i < data.delete_info.length ; i++) {
+                for (let j = 1; j < table1.rows.length-1; j++) {
+                    if(data.delete_info[i] == table1.rows[j].cells[0].textContent) {
+                        table1.rows[j].remove();
+                        break;
+                    }
+                }
+                for (let j = 1; j < table2.rows.length; j++) {
+                    if(data.delete_info[i] == table2.rows[j].cells[3].textContent) {
+                        table2.rows[j].remove();
+                        break;
+                    }
+                }
+            }
+            for(let i = 0; i < data.insert_info.length ; i++) {
+                for (let j = 1; j < table1.rows.length-1; j++) {
+                    if(data.insert_info[i] == table1.rows[j].cells[0].textContent) {
+                        table1.rows[j].cells[3].textContent = 'Thành công';
+                        break;
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    function insertClass() {
+        const input = document.querySelector('#input_class').value;
+        const formData = {
+            class_id: input
+        };
+        fetch('/student/getClass', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -366,12 +268,70 @@
                 return response.json();
         })
         .then(data => {
-            data = data.data;
-            console.log(data); // Xử lý dữ liệu trả về
+            let check_class=0;
+            const table1 = document.getElementById('t1');
+            for (let i = 1; i < table1.rows.length-1; i++) {
+                console.log(table1.rows[i]);
+                if(data.clazz_id == table1.rows[i].cells[0].textContent) {
+                    check_class = 1;
+                    break;
+                }
+            }
+            if(check_class == 1)
+                document.querySelector('#status_class').textContent = "Lớp đã có";
+            else {
+                const table2 = document.getElementById('t2');
+                for (let i = 1; i < table2.rows.length; i++) {
+                    if(data.dow == table2.rows[i].cells[0].textContent) {
+                        if(isOverlap(table2.rows[i].cells[1].textContent, data.start_time+ '-' +data.finish_time)) {
+                            check_class = 2;
+                            document.querySelector('#status_class').textContent = `Lớp ${data.clazz_id} trùng thời gian với ${table2.rows[i].cells[3].textContent} giờ ${data.start_time+ '-' +data.finish_time} ~ ${table2.rows[i].cells[1].textContent}`;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(check_class == 0) {
+                const tableBody1 = document.getElementById("t1_body");
+                const tableBody2 = document.getElementById("t2_body");
+
+                const newRow_t1 = `
+                        <tr>
+                            <td>${data.clazz_id}</td>
+                            <td>${data.subject_name}</td>
+                            <td>${data.subject_id}</td>
+                            <td>${data.status}</td>
+                            <td>${data.credit}</td>
+                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                        </tr>
+                    `;
+                const newRow_t2 = `
+                    <tr class="table-info">
+                        <th scope="col">${data.dow}</th>
+                        <th scope="col">${data.start_time+ '-' +data.finish_time}</th>
+                        <th scope="col">${data.room}</th>
+                        <th scope="col">${data.clazz_id}</th>
+                    </tr>
+                    `;
+                tableBody1.innerHTML = newRow_t1 + tableBody1.innerHTML;
+                tableBody2.innerHTML = newRow_t2 + tableBody2.innerHTML;
+                document.querySelector('#status_class').textContent = "Đã thêm";
+            }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
         });
+    }
+    function parseTime(timeStr) {
+    const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds; // Tính tổng số giây
+    }
+
+    function isOverlap(timeRange1, timeRange2) {
+    const [start1, end1] = timeRange1.split('-').map(parseTime);
+    const [start2, end2] = timeRange2.split('-').map(parseTime);
+
+    return start1 < end2 && start2 < end1;
     }
 </script>
 

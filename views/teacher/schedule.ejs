@@ -9,92 +9,25 @@
                 <tr class="table-info">
                     <th scope="col">Thứ</th>
                     <th scope="col">Thời gian</th>
-                    <th scope="col">Tuần học</th>
                     <th scope="col">Phòng học</th>
-                    <th scope="col">Lớp học</th>
+                    <th scope="col">Mã Lớp</th>
+                    <th scope="col">Mã HP</th>
+                    <th scope="col">Tên Lớp</th>
                 </tr>
             </thead>
             <tbody>
+            <%for(let i = 0 ; i < schedule.length ; i++) {%>
             <tr>
-                <td>1,005</td>
-                <td>dashboard</td>
-                <td>irrelevant</td>
-                <td>text</td>
-                <td>placeholder</td>
+                <td><%=schedule[i].dow%></td>
+                <td><%=schedule[i].start_time + '-' + schedule[i].finish_time%></td>
+                <td><%=schedule[i].room%></td>
+                <td><%=schedule[i].clazz_id%></td>
+                <td><%=schedule[i].subject_id%></td>
+                <td><%=schedule[i].subject_name%></td>
             </tr>
-            <tr>
-                <td>1,006</td>
-                <td>dashboard</td>
-                <td>illustrative</td>
-                <td>rich</td>
-                <td>data</td>
-            </tr>
-            <tr>
-                <td>1,007</td>
-                <td>placeholder</td>
-                <td>tabular</td>
-                <td>information</td>
-                <td>irrelevant</td>
-            </tr>
-            <tr>
-                <td>1,008</td>
-                <td>random</td>
-                <td>data</td>
-                <td>placeholder</td>
-                <td>text</td>
-            </tr>
-            <tr>
-                <td>1,009</td>
-                <td>placeholder</td>
-                <td>irrelevant</td>
-                <td>visual</td>
-                <td>layout</td>
-            </tr>
-            <tr>
-                <td>1,010</td>
-                <td>data</td>
-                <td>rich</td>
-                <td>dashboard</td>
-                <td>tabular</td>
-            </tr>
-            <tr>
-                <td>1,011</td>
-                <td>information</td>
-                <td>placeholder</td>
-                <td>illustrative</td>
-                <td>data</td>
-            </tr>
-            <tr>
-                <td>1,012</td>
-                <td>text</td>
-                <td>placeholder</td>
-                <td>layout</td>
-                <td>dashboard</td>
-            </tr>
-            <tr>
-                <td>1,013</td>
-                <td>dashboard</td>
-                <td>irrelevant</td>
-                <td>text</td>
-                <td>visual</td>
-            </tr>
-            <tr>
-                <td>1,014</td>
-                <td>dashboard</td>
-                <td>illustrative</td>
-                <td>rich</td>
-                <td>data</td>
-            </tr>
-            <tr>
-                <td>1,015</td>
-                <td>random</td>
-                <td>tabular</td>
-                <td>information</td>
-                <td>text</td>
-            </tr>
+            <%}%>
             </tbody>
         </table>
     </div>
 </div>
-
 <%- include('../partials/footer') %>
