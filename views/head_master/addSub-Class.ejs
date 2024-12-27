@@ -1,0 +1,193 @@
+<%- include('../partials/header') %>
+<style>
+    .container{
+        padding: 0 0 0 0;
+    }
+    .bi {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    }
+
+    /*
+    * Sidebar
+    */
+
+    @media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+    .navbar-search {
+        display: block;
+    }
+    }
+
+    .sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    }
+
+    .sidebar .nav-link.active {
+    color: #2470dc;
+    }
+
+    .sidebar-heading {
+    font-size: .75rem;
+    }
+
+    /*
+    * Navbar
+    */
+
+    .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+    padding: .75rem 1rem;
+    }
+    .btn {
+        border: 0;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-5" style="min-height: 60vh;">
+        <main id="board">
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h2>Viện <%=institute.institute_name%></h2>
+                <div>Điều hành: <%=user.headmaster_name%></div>
+                <div>Mã số cán bộ: <%=user.headmaster_id%></div>
+                <div>Mã viện: <%=user.institute_id%></div>
+            </div>
+            <div class="table-responsive small">
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Mã học phần</th>
+                            <th scope="col">Tên học phần</th>
+                            <th scope="col">Số tín chỉ</th>
+                            <th scope="col">Trọng số</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="new_subject">
+                            <td><input type="text" name="input" class="form-control"></td>
+                            <td><input type="text" name="input" class="form-control"></td>
+                            <td><input type="text" name="input" class="form-control"></td>
+                            <td><input type="text" name="input" class="form-control">
+                                <div class="container text-end">
+                                    <div id="result_Sub"></div>
+                                    <button type="button" class="btn btn-success" style="width: auto;" onclick="submitSubject()">Thêm</button>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        <%for(let i = 0; i < curSub.length ; i++) {%>
+                            <tr>
+                                <td><%=curSub[i].subject_id%></td>
+                                <td><%=curSub[i].subject_name%></td>
+                                <td><%=curSub[i].credit%></td>
+                                <td><%=curSub[i].final_coefficient%></td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive small border-top pt-5 mt-5">
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Mã Lớp</th>
+                            <th scope="col">Mã HP</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="new_class">
+                            <td><input type="text" name="input" class="form-control"></td>
+                            <td><input type="text" name="input" class="form-control"></td>
+                            <td style="width: 10px;">
+                                <div id="result_Class"></div>
+                                <button type="button" class="btn btn-success" style="width: auto;" onclick="submitClass()">Thêm</button>
+
+                            </td>
+                            
+                        </tr>
+                        <%for(let i = 0; i < curClass.length ; i++) {%>
+                            <tr>
+                                <td><%=curClass[i].clazz_id%></td>
+                                <td><%=curClass[i].subject_id%></td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    function submitSubject() {
+        const info_new = document.getElementById('new_subject');
+        const formData = {
+            subject_id: info_new.cells[0].querySelector('input').value, 
+            subject_name: info_new.cells[1].querySelector('input').value, 
+            credit: info_new.cells[2].querySelector('input').value, 
+            final_coefficient: info_new.cells[3].querySelector('input').value
+        };
+        fetch('/head_master/insertSub', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result_Sub').innerHTML = data.message;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    function submitClass() {
+        const info_new = document.getElementById('new_class');
+        const formData = {
+            clazz_id: info_new.cells[0].querySelector('input').value, 
+            subject_id: info_new.cells[1].querySelector('input').value
+        };
+        fetch('/head_master/insertClass', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result_Class').innerHTML = data.message;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+</script>
+
+<%- include('../partials/footer') %>

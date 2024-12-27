@@ -268,55 +268,57 @@
                 return response.json();
         })
         .then(data => {
+            var msg = data.message;
+            var data = data.data;
             let check_class=0;
-            const table1 = document.getElementById('t1');
-            for (let i = 1; i < table1.rows.length-1; i++) {
-                console.log(table1.rows[i]);
-                if(data.clazz_id == table1.rows[i].cells[0].textContent) {
-                    check_class = 1;
-                    break;
+                const table1 = document.getElementById('t1');
+                for (let i = 1; i < table1.rows.length-1; i++) {
+                    console.log(table1.rows[i]);
+                    if(data.subject_id == table1.rows[i].cells[2].textContent) {
+                        check_class = 1;
+                        break;
+                    }
                 }
-            }
-            if(check_class == 1)
-                document.querySelector('#status_class').textContent = "Lớp đã có";
-            else {
-                const table2 = document.getElementById('t2');
-                for (let i = 1; i < table2.rows.length; i++) {
-                    if(data.dow == table2.rows[i].cells[0].textContent) {
-                        if(isOverlap(table2.rows[i].cells[1].textContent, data.start_time+ '-' +data.finish_time)) {
-                            check_class = 2;
-                            document.querySelector('#status_class').textContent = `Lớp ${data.clazz_id} trùng thời gian với ${table2.rows[i].cells[3].textContent} giờ ${data.start_time+ '-' +data.finish_time} ~ ${table2.rows[i].cells[1].textContent}`;
-                            break;
+                if(check_class == 1)
+                    document.querySelector('#status_class').textContent = "Học phần đã tồn tại " + data.subject_id;
+                else {
+                    const table2 = document.getElementById('t2');
+                    for (let i = 1; i < table2.rows.length; i++) {
+                        if(data.dow == table2.rows[i].cells[0].textContent) {
+                            if(isOverlap(table2.rows[i].cells[1].textContent, data.start_time+ '-' +data.finish_time)) {
+                                check_class = 2;
+                                document.querySelector('#status_class').textContent = `Lớp ${data.clazz_id} trùng thời gian với ${table2.rows[i].cells[3].textContent} giờ ${data.start_time+ '-' +data.finish_time} ~ ${table2.rows[i].cells[1].textContent}`;
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            if(check_class == 0) {
-                const tableBody1 = document.getElementById("t1_body");
-                const tableBody2 = document.getElementById("t2_body");
+                if(check_class == 0) {
+                    const tableBody1 = document.getElementById("t1_body");
+                    const tableBody2 = document.getElementById("t2_body");
 
-                const newRow_t1 = `
+                    const newRow_t1 = `
+                            <tr>
+                                <td>${data.clazz_id}</td>
+                                <td>${data.subject_name}</td>
+                                <td>${data.subject_id}</td>
+                                <td>${data.status}</td>
+                                <td>${data.credit}</td>
+                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                            </tr>
+                        `;
+                    const newRow_t2 = `
                         <tr>
-                            <td>${data.clazz_id}</td>
-                            <td>${data.subject_name}</td>
-                            <td>${data.subject_id}</td>
-                            <td>${data.status}</td>
-                            <td>${data.credit}</td>
-                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                            <th scope="col">${data.dow}</th>
+                            <th scope="col">${data.start_time+ '-' +data.finish_time}</th>
+                            <th scope="col">${data.room}</th>
+                            <th scope="col">${data.clazz_id}</th>
                         </tr>
-                    `;
-                const newRow_t2 = `
-                    <tr class="table-info">
-                        <th scope="col">${data.dow}</th>
-                        <th scope="col">${data.start_time+ '-' +data.finish_time}</th>
-                        <th scope="col">${data.room}</th>
-                        <th scope="col">${data.clazz_id}</th>
-                    </tr>
-                    `;
-                tableBody1.innerHTML = newRow_t1 + tableBody1.innerHTML;
-                tableBody2.innerHTML = newRow_t2 + tableBody2.innerHTML;
-                document.querySelector('#status_class').textContent = "Đã thêm";
-            }
+                        `;
+                    tableBody1.innerHTML = newRow_t1 + tableBody1.innerHTML;
+                    tableBody2.innerHTML = newRow_t2 + tableBody2.innerHTML;
+                    document.querySelector('#status_class').textContent = msg;
+                }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);

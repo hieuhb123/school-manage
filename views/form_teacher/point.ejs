@@ -1,0 +1,143 @@
+<%- include('../partials/header') %>
+<style>
+    .container{
+        padding: 0 0 0 0;
+    }
+    .bi {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    }
+
+    /*
+    * Sidebar
+    */
+
+    @media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+    .navbar-search {
+        display: block;
+    }
+    }
+
+    .sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    }
+
+    .sidebar .nav-link.active {
+    color: #2470dc;
+    }
+
+    .sidebar-heading {
+    font-size: .75rem;
+    }
+
+    /*
+    * Navbar
+    */
+
+    .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+    padding: .75rem 1rem;
+    }
+    .btn {
+        border: 0;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row" style="min-height: 60vh;">
+        <main id="board">
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="class_id h2"></h1>
+                <div class="subject_id"></div>
+                <div class="class_id"></div>
+                <div class="subject_name"></div>
+                <div class="number_student"></div>
+            </div>
+            <div class="table-responsive small">
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Học sinh</th>
+                            <th scope="col">MSSV</th>
+                            <th scope="col">Điểm rèn luyện</th>
+                            <th scope="col">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%for(let i = 0; i < student.length ; i++) {%>
+                            <tr onkeyup="checkUpdate(this)">
+                                <td><%=student[i].student_name%></td>
+                                <td><%=student[i].student_id%></td>
+                                <td class="input-group-sm"><input type="number" name="input" value="<%=student[i].conduct_point%>" class="form-control"></td>
+                                <td></td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
+            <div class="class_id"></div>
+            <div class="container text-end">
+                <div id="result"></div>
+                <button type="button" class="btn btn-success" style="width: auto;" onclick="submitRegister()">Gửi điểm</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    function submitRegister() {
+        const table = document.getElementById('t1');
+        let dataget = [];
+
+        for (let i = 1; i < table.rows.length; i++) {
+            if(table.rows[i].cells[3].textContent != "update")
+                continue;
+            let cell = {
+                student_id: table.rows[i].cells[1].textContent,
+                conduct_point: table.rows[i].cells[2].querySelector('input').value
+            };
+            dataget.push(cell);
+        }
+
+        const formData = {
+            update_conduct: dataget
+        };
+        fetch('/form_teacher/give_point', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result').innerHTML = data.message;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+    function checkUpdate(input) {
+        input.cells[3].textContent = "update";
+    }
+</script>
+
+<%- include('../partials/footer') %>

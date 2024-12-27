@@ -34,9 +34,9 @@
                         <img src="https://github.com/mdo.png" alt="mdo" width="60" height="60" class="rounded-circle">
                     </div>
                     <div class="divisive"></div>
-                    <div>MSGV: <%=info.lecturer_id%></div>
-                    <div>Họ tên: <%=info.lecturer_name%></div>
-                    <div>Viện: <%=info.institute_name%></div>
+                    <div>MSGV: <%=user.formteacher_id%></div>
+                    <div>Họ tên: <%=user.formteacher_name%></div>
+                    <div>Viện: <%=institute.institute_name%></div>
                 </div>
             </div>
         </div> 
@@ -47,12 +47,13 @@
             <div class="d-flex justify-content-between" style="margin-left: -10px; margin-right: -10px;">
                 <div style="padding-left: 20px; padding-right: 10px;">
                     <ul class="no-bullets">
-                        <li>Giới tính: <%= info.gender === 'M' ? "Nam" : "Nữ"%></li> 
-                        <li>Số ĐT: <%=info.phone_number%></li> 
+                        <li>Giới tính: <%= user.gender === 'M' ? "Nam" : "Nữ"%></li> 
+                        <li>Số ĐT: <%=user.phone_number%></li> 
                     </ul>
                 </div> 
             </div> 
         </div>
     </div>
 </div>
+
 <%- include('../partials/footer') %>

@@ -34,10 +34,10 @@
                         <img src="https://github.com/mdo.png" alt="mdo" width="60" height="60" class="rounded-circle">
                     </div>
                     <div class="divisive"></div>
-                    <div>MSSV: 20225971</div>
-                    <div>Họ tên: Nguyễn Trung Hiếu</div>
-                    <div>Lớp: ICT 02-K67</div>
-                    <div>Email: hieu.nt225971@sis.hust.edu.vn</div>
+                    <div>MSSV: <%=user.student_id%></div>
+                    <div>Họ tên: <%=user.student_name%></div>
+                    <div>Lớp: <%=user.major%></div>
+                    <div>Email: <%=user.username%></div>
                 </div>
             </div>
             <div class="card">
@@ -53,11 +53,9 @@
                     <div role="tabpanel" id="pane-0" aria-labelledby="tab-0" class="el-tab-pane">
                         <ul class="no-bullets">
                             <li>Trạng thái học tập: <strong style="color: rgb(0, 150, 136);">Học</strong></li> 
-                            <li>CPA: 2.76</li> 
-                            <li>Nợ: 3 TC</li> 
-                            <li>Tích lũy: 59 TC</li> 
-                            <li>Mức cảnh báo: Mức 0</li> 
-                            <li>Trình độ: Năm thứ hai </li>
+                            <li>CPA: <%=cpain.cpa%></li> 
+                            <li>Tích lũy: <%=cpain.cumulative_credits%> TC</li> 
+                            <li>Trình độ: Năm thứ <%=grade%> </li>
                         </ul>
                     </div>
                     <div role="tabpanel" id="pane-1" aria-labelledby="tab-1" class="el-tab-pane" style="display: none;" aria-hidden="true">
@@ -67,13 +65,13 @@
                                     <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5"/>
                                     <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85z"/>
                                 </svg>
-                                Cán bộ quản lý lớp: hau.leduc@hust.edu.vn
+                                Cán bộ quản lý lớp: <%=manager_class%>
                             </li> 
                             <li>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building-fill" viewBox="0 0 16 16" style="color: red;">
                                     <path d="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v-3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V16h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
                                 </svg>
-                                Viện: Trường Công nghệ Thông tin và Truyền thông
+                                Viện: <%=institute%>
                             </li>
                         </ul>
                     </div>
@@ -88,49 +86,34 @@
 
                 <div style="padding-left: 20px; padding-right: 10px;">
                     <ul class="no-bullets">
-                        <li>Ngày sinh: 02/10/2004</li> 
-                        <li>Số CMTND: 017204005647</li> 
-                        <li>Dân tộc: Kinh</li> 
-                        <li>Ngày vào Đoàn:</li>
+                        <li>Ngày sinh: <%=new Date(user.dob).toISOString().split("T")[0]%></li> 
+                        <li>Số CMTND: <%=user.citizen_id%></li> 
                     </ul>
                 </div> 
 
                 <div style="padding-left: 10px; padding-right: 10px;">
                     <ul class="no-bullets">
-                        <li>Nơi sinh: Tỉnh Hoà Bình</li> 
-                        <li>Tôn giáo: Không</li>
-                        <li>Ngày vào Đảng:</li>
+                        <li>Giới tính: <%= user.gender === 'M' ? "Nam" : "Nữ"%></li> 
                     </ul>
-                </div> 
-
-                <div style="padding-left: 10px; padding-right: 10px;">
+                </div>
+                <div>
                     <ul class="no-bullets">
-                        <li>Giới tính: Nam</li> 
-                        <li>Ngày cấp: </li> 
-                        <li>Chi đoàn:</li>
                     </ul>
                 </div>
             </div> 
-
-            <p style="padding-left: 10px; margin-top: 0px !important;">Đối tượng chính sách:</p> 
-            <p style="padding-left: 10px; margin-top: 0px;">Số thẻ bảo hiểm: 1720020232</p> 
-            <p style="padding-left: 10px; margin-top: 0px;">Địa chỉ thường trú: số nhà 202, tổ 8, phường Dân Chủ, TP Hòa Bình, Tỉnh Hòa Bình</p> 
-            <p style="padding-left: 10px;">Nơi ở hiện tại: Tỉnh Hoà Bình</p> 
             <h4 style="font-weight: bold;">Thông tin gia đình</h4> 
-            <p style="font-weight: bold; padding-left: 10px;">Họ và tên cha: Nguyễn Lực Bình</p> 
+            <p style="font-weight: bold; padding-left: 10px;">Họ và tên cha: <%=tutor.father_name%></p> 
             <div class="d-flex justify-content-between">
                 <div style="padding-left: 10px;">
                     <ul class="no-bullets">
-                        <li>Dân tộc: Kinh</li> 
-                        <li>Nghề nghiệp: Cán bộ</li>
-                        <li>Liên hệ: 0347785236</li>
+                        <li>Nghề nghiệp: <%=tutor.father_job%></li>
+                        <li>Liên hệ: <%=tutor.father_phonenumber%></li>
                     </ul>
                 </div> 
 
                 <div>
                     <ul class="no-bullets">
-                        <li>Năm sinh: 1966</li> 
-                        <li>Tôn giáo:</li>
+                        <li>Năm sinh: <%=tutor.father_dob.toJSON().slice(0,10).replace(/-/g,'/');%></li> 
                     </ul>
                 </div> 
                 
@@ -139,20 +122,18 @@
                     </ul>
                 </div>
             </div> 
-            <p style="font-weight: bold; padding-left: 10px; padding-top: 10px;">Họ và tên mẹ: Phạm Thị Sen</p> 
+            <p style="font-weight: bold; padding-left: 10px; padding-top: 10px;">Họ và tên mẹ: <%=tutor.mother_name%></p> 
             <div class="d-flex justify-content-between">
                 <div style="padding-left: 10px;">
                     <ul class="no-bullets">
-                        <li>Dân tộc: Kinh</li> 
-                        <li>Nghề nghiệp: Giáo viên</li>
-                        <li>Liên hệ: 0347785236</li>
+                        <li>Nghề nghiệp: <%=tutor.mother_job%></li>
+                        <li>Liên hệ: <%=tutor.mother_phonenumber%></li>
                     </ul>
                 </div> 
 
                 <div>
                     <ul class="no-bullets">
-                        <li>Năm sinh: 1972</li> 
-                        <li>Tôn giáo:</li>
+                        <li>Năm sinh: <%=tutor.mother_dob.toJSON().slice(0,10).replace(/-/g,'/');%></li> 
                     </ul>
                 </div> 
 
@@ -161,13 +142,18 @@
                     </ul>
                 </div>
             </div> 
-            </div> 
         </div>
     </div>
 </div>
 
+<div style="width: 70%;height: 500px;margin-left: 15%;margin-top: 100px;">
+    <canvas id="GPA-chart" width="1125" height="500"></canvas>
+</div>
+<div style="width: 70%;height: 500px;margin-left: 15%;margin-top: 100px;">
+    <canvas id="DRL-chart" width="1125" height="500"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
-
 function selectButton(button, number_pane) {
 
     let buttons = document.querySelectorAll('.card-body button');
@@ -187,6 +173,59 @@ function selectButton(button, number_pane) {
         pane_1.style.display = '';
     }
 }
-
+let semester_data = [], gpa_data=[];
+const GPA = <%- JSON.stringify(GPA) %>;
+GPA.sort((a, b) => a.semester_id.localeCompare(b.semester_id));
+for(let i = 0; i < GPA.length; i++) {
+    semester_data.push(GPA[i].semester_id);
+    gpa_data.push(GPA[i].gpa);
+}
+new Chart(document.getElementById("GPA-chart"), {
+  type: 'line',
+  data: {
+    labels: semester_data,
+    datasets: [{ 
+        data:  gpa_data,
+        label: "GPA",
+        borderColor: "#3e95cd",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Biểu đồ học tập'
+    }
+  }
+});
+let conduct_data = [], semester_data_ = [];
+const conduct_pointt = <%- JSON.stringify(conduct) %>;
+conduct_pointt.sort((a, b) => a.semester_id.localeCompare(b.semester_id));
+for(let i = 0; i < conduct_pointt.length; i++) {
+    semester_data_.push(conduct_pointt[i].semester_id);
+    conduct_data.push(conduct_pointt[i].conduct_point);
+}
+new Chart(document.getElementById("DRL-chart"), {
+  type: 'line',
+  data: {
+    labels: semester_data_,
+    datasets: [{ 
+        data:  conduct_data,
+        label: "Conduct point",
+        borderColor: "#3e95cd",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Biểu đồ rèn luyện'
+    }
+  }
+});
 </script>
+
+
 <%- include('../partials/footer') %>

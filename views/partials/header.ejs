@@ -32,9 +32,14 @@
                   <li><a class="dropdown-item" href="/teacher/schedule">Schedule</a></li>
                   <li><a class="dropdown-item" href="/teacher/give_point">Give point</a></li>
                   <li><a class="dropdown-item" href="/teacher/register-class">Register class</a></li>
-                <%} else {%>
+                <%} else if(user.typeLogin == 'ph'){%>
                   <li><a class="dropdown-item" href="/tutor/result">Result</a></li>
-                <%}%>
+                <%} else if(user.typeLogin == 'cn'){%>
+                  <li><a class="dropdown-item" href="/form_teacher/give_point">Give conduct point</a></li>
+                <%} else if(user.typeLogin == 'ht'){%>
+                  <li><a class="dropdown-item" href="/head_master/addSC">Add subject and class</a></li>
+                <%}%> 
+                
               </ul>
               <%}%>
             </li>
@@ -46,12 +51,12 @@
           </form>
           <%} else {%>
             <div class="dropdown text-end">
-              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" >
               </a>
-              <ul class="dropdown-menu text-small">
+              <ul class="dropdown-menu text-small" >
                 <li class="dropdown-item" style="display: flex;"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle"><p style="margin-top: 6px;margin-left: 10px;margin-bottom: 0;"> <%=user.user_name%></p></li>
-                <li><a class="dropdown-item" href=<%= user.typeLogin == 'sv'?"/student/profile":user.typeLogin == 'gv'?"/teacher/profile":"/tutor/profile"%>>Profile</a></li>
+                <li><a id="profile" class="dropdown-item">Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/logout">Sign out</a></li>
               </ul>
@@ -60,3 +65,19 @@
         </div>
       </div>
     </header>
+    
+  <% if(locals.user) { %>
+    <script>
+      const type = "<%-user.typeLogin%>";
+      if(type == 'sv') 
+        document.getElementById("profile").href = "/student/profile";
+      else if(type == 'gv') 
+        document.getElementById("profile").href = "/teacher/profile";
+      else if(type == 'ph') 
+        document.getElementById("profile").href = "/tutor/profile";
+      else if(type == 'cn') 
+        document.getElementById("profile").href = "/form_teacher/profile";
+      else if(type == 'ht') 
+        document.getElementById("profile").href = "/head_master/profile";
+    </script>
+  <%}%>

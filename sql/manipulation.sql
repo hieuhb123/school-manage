@@ -192,11 +192,11 @@ WHERE headmaster_id = $1;
 
 -- Thêm một môn học
 -- LƯU Ý: institute_id của subject được chèn thêm giống với institute của headmaster
-INSERT INTO subject(subject_id, subject_name, credit, finalcoeffi) 
-VALUES (..., ..., ..., ...);
+INSERT INTO subject(subject_id, subject_name, credit, institute_id,final_coefficient) 
+VALUES (..., ..., ...,..., ...);
 
 -- Thêm các lớp cho môn học
-INSERT INTO clazz(clazz_id, subject)
+INSERT INTO clazz(clazz_id, subject_id)
 VALUES (..., ...)
 
 

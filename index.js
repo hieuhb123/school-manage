@@ -180,15 +180,21 @@ app.get("/student/schedule", async(req, res) => {
   }
 });
 
-app.get("/teacher/profile", (req, res) => {
+app.get("/teacher/profile", async (req, res) => {
   
   if(!req.session.user)
     res.redirect("/");
   else {
     curPage = '';
+    const getTeacherInfo = await db.query("\
+      SELECT lecturer_id, lecturer_name, gender, phone_number, institute_name \
+      FROM lecturer \
+      JOIN institute USING (institute_id) \
+      WHERE lecturer_id = $1;", [req.session.user.lecturer_id]);
     res.render("teacher/profile.ejs", {
       currentPage: curPage,
-      user: req.session.user
+      user: req.session.user,
+      info: getTeacherInfo.rows[0]
     });
   }
 });
@@ -199,9 +205,8 @@ app.get("/teacher/schedule", async (req, res) => {
   else {
     curPage = 'Service';
     const getSchedule = await db.query("\
-      SELECT clazz_id, s.subject_id, s.subject_name, dow, start_time, finish_time, room \
+      SELECT clazz_id, subject_id, subject_name, dow, start_time, finish_time, room \
       FROM class_information \
-      JOIN subject s USING (subject_id) \
       WHERE lecturer_id = $1 AND semester_id = $2;", [req.session.user.lecturer_id, getSemester_id]);
     res.render("teacher/schedule.ejs", {
       currentPage: curPage,
@@ -211,14 +216,19 @@ app.get("/teacher/schedule", async (req, res) => {
   }
 });
 
-app.get("/teacher/give_point", (req, res) => {
+app.get("/teacher/give_point", async (req, res) => {
   if(!req.session.user)
       res.redirect("/");
   else {
     curPage = 'Service';
+    const getClass = await db.query("\
+      SELECT clazz_id \
+      FROM class_information \
+      WHERE lecturer_id = $1 AND semester_id = $2;", [req.session.user.lecturer_id, getSemester_id]);
     res.render("teacher/point.ejs", {
       currentPage: curPage,
-      user: req.session.user
+      user: req.session.user,
+      class_teach: getClass.rows 
     });
   }
 });
@@ -235,26 +245,147 @@ app.get("/teacher/register-class", (req, res) => {
   }
 });
 
-app.get("/turtor/profile", (req, res) => {
+app.get("/tutor/profile", async (req, res) => {
   if(!req.session.user)
     res.redirect("/");
   else {
     curPage = '';
-    res.render("tutor/profile.ejs", {
+    let get_tutor = await db.query("SELECT * FROM tutor WHERE tutor_id = $1", [req.session.user.student_id]);
+    let get_CPA = await db.query(" \
+      SELECT SUM(credit) AS cumulative_credits, ROUND((SUM(credit * four_scale) / SUM(credit)), 2) AS CPA \
+      FROM subject_grades_of_students \
+      WHERE student_id = $1 AND semester_id < $2;", [req.session.user.student_id, getSemester_id]);
+    let get_GPA = await db.query(" \
+      SELECT semester_id, gpa \
+      FROM calculate_gpa \
+      WHERE student_id = $1;", [req.session.user.student_id]);
+    let get_conduct_point = await db.query(" \
+      SELECT semester_id, formteacher_name, conduct_point \
+      FROM give_conduct_point \
+      JOIN form_teacher USING (formteacher_id) \
+      WHERE student_id = $1;", [req.session.user.student_id]);
+    let get_headmaster = await db.query(" \
+      SELECT formteacher_name \
+      FROM give_conduct_point \
+      JOIN form_teacher f USING (formteacher_id) \
+      WHERE student_id = $1 AND semester_id = $2;", [req.session.user.student_id, getSemester_id]);
+    let get_institute = await db.query(" \
+      SELECT institute_name \
+      FROM student \
+      JOIN institute USING (institute_id) \
+      WHERE student_id = $1;", [req.session.user.student_id]);
+    res.render("student/profile.ejs", {
       currentPage: curPage,
-      user: req.session.user
+      user: req.session.user,
+      tutor: get_tutor.rows[0],
+      cpain: get_CPA.rows[0],
+      grade: Math.floor(Number(getSemester_id)/10 - Number(req.session.user.student_id)/10000),
+      GPA: get_GPA.rows,
+      conduct: get_conduct_point.rows,
+      manager_class: get_headmaster.rows[0],
+      institute: get_institute.rows[0].institute_name
     });
   }
 });
 
-app.get("/turtor/result", (req, res) => {
+app.get("/tutor/result", async (req, res) => {
   if(!req.session.user)
     res.redirect("/");
   else {
     curPage = 'Service';
-    res.render("tutor/result.ejs", {
+    const getResult = await db.query("\
+      SELECT semester_id, t1.subject_id, subject_name, t1.credit, class_point, four_scale, alphabet_point \
+      FROM subject_grades_of_students t1 \
+      JOIN subject USING (subject_id) \
+      WHERE student_id = $1 AND semester_id < $2;", [req.session.user.student_id, getSemester_id]);
+    res.render("student/result.ejs", {
       currentPage: curPage,
-      user: req.session.user
+      user: req.session.user,
+      result: getResult.rows
+    });
+  }
+});
+
+app.get("/form_teacher/give_point", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = 'Service';
+    const getStudentInfo = await db.query("\
+      SELECT s.student_id, student_name, conduct_point \
+      FROM give_conduct_point \
+      JOIN student s USING (student_id) \
+      WHERE formteacher_id = $1 AND semester_id = $2;", [req.session.user.formteacher_id, getSemester_id]);
+    res.render("form_teacher/point.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      student: getStudentInfo.rows 
+    });
+  }
+});
+
+app.get("/form_teacher/profile", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = '';
+    const getTeacherInfo = await db.query("\
+      SELECT institute_name \
+      FROM form_teacher \
+      JOIN institute USING (institute_id) \
+      WHERE formteacher_id = $1;", [req.session.user.formteacher_id]);
+    res.render("form_teacher/profile.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      institute: getTeacherInfo.rows[0]
+    });
+  }
+});
+
+app.get("/head_master/profile", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = '';
+    const getInfo = await db.query("\
+      SELECT institute_name \
+      FROM headmaster \
+      JOIN institute USING (institute_id) \
+      WHERE headmaster_id = $1;", [req.session.user.headmaster_id]);
+    res.render("head_master/profile.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      institute: getInfo.rows[0]
+    });
+  }
+});
+
+app.get("/head_master/addSC", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = 'Service';
+    const getInstitute = await db.query("\
+      SELECT * \
+      FROM institute \
+      WHERE institute_id = $1", [req.session.user.institute_id]);
+    const getSub = await db.query("\
+      SELECT * \
+      FROM subject \
+      WHERE institute_id = $1 \
+      ORDER BY subject_id ASC ", [req.session.user.institute_id]);
+    let getClass = await db.query("\
+        SELECT c.clazz_id, c.subject_id \
+        FROM clazz c\
+        JOIN subject USING(subject_id)\
+        WHERE institute_id = $1 \
+        ORDER BY subject_id ASC ", [req.session.user.institute_id]);
+    res.render("head_master/addSub-Class.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      institute: getInstitute.rows[0],
+      curSub: getSub.rows,
+      curClass: getClass.rows
     });
   }
 });
@@ -281,7 +412,9 @@ app.post("/login", async (req, res) => {
       let getUsername;
       if(typeLogin === 'sv') getUsername = await db.query("SELECT * FROM student WHERE username = $1", [username]);
       else if(typeLogin == 'gv') getUsername = await db.query("SELECT * FROM lecturer WHERE username = $1", [username]);
-      else getUsername = await db.query("SELECT * FROM student WHERE student_id = $1", [username]);
+      else if(typeLogin == 'ph') getUsername = await db.query("SELECT * FROM student WHERE student_id = $1", [username]);
+      else if(typeLogin == 'cn') getUsername = await db.query("SELECT * FROM form_teacher WHERE username = $1", [username]);
+      else if(typeLogin == 'ht') getUsername = await db.query("SELECT * FROM headmaster WHERE username = $1", [username]);
 
       if (getUsername.rows.length > 0) {
         if(typeLogin === 'ph' && password === getUsername.rows[0].citizen_id){
@@ -333,21 +466,95 @@ app.post("/student/submitRegister", async (req, res) => {
 });
 
 app.post("/student/getClass", async (req, res) => {
-  const getClassRegised = await db.query(" \
-    SELECT ci.clazz_id, ci.subject_name, subject_id, 'Insert' AS status, credit, room, start_time, finish_time, dow \
-    FROM class_information ci \
-    JOIN subject USING(subject_id) \
-    WHERE ci.clazz_id = $1 AND semester_id = $2", [req.body.class_id, getNextSemester(getSemester_id)]);
-  res.json(getClassRegised.rows[0]);
+  try {
+    const getClassRegised = await db.query(" \
+      SELECT ci.clazz_id, ci.subject_name, subject_id, 'Insert' AS status, credit, room, start_time, finish_time, dow \
+      FROM class_information ci \
+      JOIN subject USING(subject_id) \
+      WHERE ci.clazz_id = $1 AND semester_id = $2", [req.body.class_id, getNextSemester(getSemester_id)]);
+    res.json({message: "Đã thêm", data: getClassRegised.rows[0]});
+  }
+  catch (err) {
+    res.json({message: err.message});
+  }
 });
 
-app.post("/teacher/give_point", (req, res) => {
-  const earn_req = req.body;
-  res.json({ message: 'Dữ liệu đã nhận', data: earn_req});
+app.post("/teacher/get_class_give_point", async (req, res) => {
+  try {
+    const getClassInfo = await db.query(" \
+      SELECT clazz_id, subject_id, subject_name, current_student_number \
+      FROM class_information \
+      WHERE semester_id = $1 AND clazz_id = $2;", [getSemester_id, req.body.class_id]);
+    const getStudentInfo = await db.query(" \
+      SELECT s.student_name, s.student_id, midpoint, finalpoint \
+      FROM class_information ci \
+      JOIN enroll e USING (clazz_id) \
+      JOIN student s USING (student_id) \
+      WHERE lecturer_id = $1 AND e.semester_id = $2 AND clazz_id = $3;", [req.session.user.lecturer_id, getSemester_id, req.body.class_id]);
+    res.json({class_info: getClassInfo.rows[0], student_info: getStudentInfo.rows});
+  }
+  catch(err) {
+    console.log(err);
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.post("/teacher/give_point", async (req, res) => {
+  try {
+    for(let i = 0 ; i < req.body.class_regiter.length ; i++) {
+      const formdata = [req.body.class_regiter[i].student_id, req.body.class_id, getSemester_id, req.body.class_regiter[i]. midpoint, req.body.class_regiter[i].finalpoint];
+      await db.query(" \
+        UPDATE enroll \
+        SET midpoint = $4, finalpoint = $5 \
+        WHERE student_id = $1 AND clazz_id = $2 AND semester_id = $3;", formdata);
+    }
+    res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+
+app.post("/form_teacher/give_point", async (req, res) => {
+  try {
+    for(let i = 0 ; i < req.body.update_conduct.length ; i++) {
+      const formdata = [req.body.update_conduct[i].student_id, getSemester_id, req.body.update_conduct[i].conduct_point];
+      await db.query(" \
+        UPDATE give_conduct_point \
+        SET conduct_point = $3 \
+        WHERE student_id = $1 AND semester_id = $2;", formdata);
+    }
+    res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+});
+
+app.post("/head_master/insertSub", async (req, res) => {
+  try {
+    await db.query(" \
+      INSERT INTO subject(subject_id, subject_name, credit, institute_id, final_coefficient) \
+      VALUES ($1, $2, $3, $4, $5);", [req.body.subject_id, req.body.subject_name, req.body.credit, req.session.user.institute_id, req.body.final_coefficient]);
+    res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+
+app.post("/head_master/insertClass", async (req, res) => {
+  try {
+    await db.query(" \
+      INSERT INTO clazz(clazz_id, subject_id) \
+      VALUES ($1, $2);", [req.body.clazz_id, req.body.subject_id]);
+    res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
 });
 
 function getNextSemester(semester_id) {
@@ -360,4 +567,9 @@ function getNextSemester(semester_id) {
     const nextYear = parseInt(year) + 1;  
     return nextYear + '1'; 
   }
-}
+};
+
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

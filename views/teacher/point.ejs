@@ -70,36 +70,29 @@
                     </h6>
         
                     <ul class="nav flex-column mb-auto" id="classlist">
-                        <li class="nav-item px-3">
-                            <button style="width: 100%;" type="button" class="btn btn-outline-light text-start px-1" onclick="showStudents(1); selectButton(this)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backpack4-fill" viewBox="0 0 16 16">
-                                    <path d="M8 0a2 2 0 0 0-2 2H3.5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4v.5a.5.5 0 0 0 1 0V7h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2-2m1 2a1 1 0 0 0-2 0zm-4 9v2h6v-2h-1v.5a.5.5 0 0 1-1 0V11z"/>
-                                    <path d="M14 7.599A3 3 0 0 1 12.5 8H9.415a1.5 1.5 0 0 1-2.83 0H3.5A3 3 0 0 1 2 7.599V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
-                                </svg>
-                                Lớp .....
-                            </button>
-                        </li>
-                        <li class="nav-item px-3">
-                            <button style="width: 100%;" type="button" class="btn btn-outline-light text-start px-1" onclick="showStudents(2); selectButton(this)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backpack4-fill" viewBox="0 0 16 16">
-                                    <path d="M8 0a2 2 0 0 0-2 2H3.5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4v.5a.5.5 0 0 0 1 0V7h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2-2m1 2a1 1 0 0 0-2 0zm-4 9v2h6v-2h-1v.5a.5.5 0 0 1-1 0V11z"/>
-                                    <path d="M14 7.599A3 3 0 0 1 12.5 8H9.415a1.5 1.5 0 0 1-2.83 0H3.5A3 3 0 0 1 2 7.599V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
-                                </svg>
-                                Lớp ......
-                            </button>
-                        </li>
+                        <%for(let i = 0 ; i < class_teach.length ; i++) {%>
+                            <li class="nav-item px-3">
+                                <button style="width: 100%;" type="button" class="btn btn-outline-light text-start px-1" onclick="showStudents('<%-class_teach[i].clazz_id%>'); selectButton(this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backpack4-fill" viewBox="0 0 16 16">
+                                        <path d="M8 0a2 2 0 0 0-2 2H3.5a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4v.5a.5.5 0 0 0 1 0V7h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2-2m1 2a1 1 0 0 0-2 0zm-4 9v2h6v-2h-1v.5a.5.5 0 0 1-1 0V11z"/>
+                                        <path d="M14 7.599A3 3 0 0 1 12.5 8H9.415a1.5 1.5 0 0 1-2.83 0H3.5A3 3 0 0 1 2 7.599V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                    Lớp <%=class_teach[i].clazz_id%>
+                                </button>
+                            </li>
+                        <%}%>
                     </ul>
                 </div>
             </div>
         </div>
   
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="board" style="display: none">
-            
             <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2" id="subject_name"></h1>
-                <div id="subject_id"></div>
-                <div id="class_id"></div>
-                <div id="number_student"></div>
+                <h1 class="class_id h2"></h1>
+                <div class="subject_id"></div>
+                <div class="class_id"></div>
+                <div class="subject_name"></div>
+                <div class="number_student"></div>
             </div>
             <div class="table-responsive small">
                 <table id="t1" class="table table-striped-columns table-sm mb-0">
@@ -107,13 +100,14 @@
                         <tr class="table-info">
                             <th scope="col">Học sinh</th>
                             <th scope="col">MSSV</th>
-                            <th scope="col">Điểm quá trình</th>
                             <th scope="col">Điểm giữa kỳ</th>
                             <th scope="col">Điểm cuối lỳ</th>
+                            <th scope="col">Trạng thái</th>
                         </tr>
                     </thead>
                 </table>
             </div>
+            <div class="class_id"></div>
             <div class="container text-end">
                 <div id="result"></div>
                 <button type="button" class="btn btn-success" style="width: auto;" onclick="submitRegister()">Gửi điểm</button>
@@ -123,173 +117,62 @@
 </div>
 
 <script>
-    let currentClass = 1;
-    const studentData = [
-        {
-            'id': 1,
-            'ten': 'Nguyễn Văn A',
-            'MSSV': 1,
-            'QT': 5,
-            'GK': 6,
-            'CK': 1,
-        },
-        {
-            'id': 1,
-            'ten': 'Trần Thị B',
-            'MSSV': 2,
-            'QT': 6,
-            'GK': 7,
-            'CK': 2,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 1,
-            'ten': 'Lê Văn C',
-            'MSSV': 3,
-            'QT': 7,
-            'GK': 8,
-            'CK': 3,
-        },
-        {
-            'id': 2,
-            'ten': ['Nguyễn Văn E', 'Trần Thị R', 'Lê Văn D'],
-            'MSSV': [1, 2, 3],
-            'GK': [6, 7, 8],
-            'CK': [1, 2, 3],
-            'total':[4, 5, 6]
-        }
-    ];
-
     function showStudents(id) {
         document.getElementById('result').innerHTML = "";
         document.getElementById('board').style.display = "";
         const table = document.getElementById('t1');
         while (table.rows.length > 1) 
             table.deleteRow(1);
-        let number = 0;
-        currentClass = id;
-        for(let i = 0; i < studentData.length; i++){
-            if(studentData[i].id == id){
+
+        const formData = {
+            class_id: id
+        };
+        fetch('/teacher/get_class_give_point', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            const subject_name = document.getElementsByClassName('subject_name');
+            const subject_id = document.getElementsByClassName('subject_id');
+            const class_id = document.getElementsByClassName('class_id');
+            const number_student = document.getElementsByClassName('number_student');
+            const class_info = data.class_info;
+            class_id[0].innerHTML = "Bảng điểm lớp " + class_info.clazz_id;
+            subject_id[0].innerHTML = "Mã HP: " + class_info.subject_id;
+            class_id[1].innerHTML = "Mã lớp: " + class_info.clazz_id;
+            class_id[2].value = class_info.clazz_id;
+            subject_name[0].innerHTML = "Tên Lớp: " + class_info.subject_name;
+            number_student[0].innerHTML = "Tổng số sinh viên: " + class_info.current_student_number;
+            const studentData = data.student_info;
+            for(let i = 0; i < studentData.length; i++){
                 let newRow = table.insertRow(-1);
                 let cell0 = newRow.insertCell(0);
                 let cell1 = newRow.insertCell(1);
                 let cell2 = newRow.insertCell(2);
                 let cell3 = newRow.insertCell(3);
                 let cell4 = newRow.insertCell(4);
-                cell0.innerHTML = studentData[i].ten;
-                cell1.innerHTML = studentData[i].MSSV;
-                cell2.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].QT} class="form-control">`);
-                cell3.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].GK} class="form-control">`);
-                cell4.insertAdjacentHTML('beforeend', `<input type="text" name="input" value=${studentData[i].CK} class="form-control">`);
+                cell0.innerHTML = studentData[i].student_name;
+                cell1.innerHTML = studentData[i].student_id;
+                cell2.insertAdjacentHTML('beforeend', `<input type="number" name="input" value=${studentData[i].midpoint} class="form-control" min="0" max="10">`);
+                cell3.insertAdjacentHTML('beforeend', `<input type="number" name="input" value=${studentData[i].finalpoint} class="form-control" min="0" max="10">`);
                 cell2.classList.add('input-group-sm');
                 cell3.classList.add('input-group-sm');
-                cell4.classList.add('input-group-sm');
-                number++;
+                newRow.setAttribute("onkeyup", "checkUpdate(this)");
+                newRow.value = "false";
             }
-        }
-        const subject_name = document.getElementById('subject_name');
-        const subject_id = document.getElementById('subject_id');
-        const class_id = document.getElementById('class_id');
-        const number_student = document.getElementById('number_student');
-        subject_name.innerHTML = "Bảng điểm lớp " + id;
-        subject_id.innerHTML = "Mã HP: " + id;
-        class_id.innerHTML = "Mã lớp: " + id;
-        number_student.innerHTML = "Tổng số sinh viên: " + number;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }
     function selectButton(button) {
 
@@ -306,15 +189,18 @@
         let dataget = [];
 
         for (let i = 1; i < table.rows.length; i++) {
-            let cell = [];
-            for(let j = 0; j < 2; j++)
-                cell.push(table.rows[i].cells[j].textContent);
-            for(let j = 2; j < 5; j++)
-                cell.push(table.rows[i].cells[j].querySelector('input').value);
+            if(table.rows[i].cells[4].textContent != "update")
+                continue;
+            let cell = {
+                student_id: table.rows[i].cells[1].textContent,
+                midpoint: table.rows[i].cells[2].querySelector('input').value,
+                finalpoint: table.rows[i].cells[3].querySelector('input').value
+            };
             dataget.push(cell);
         }
 
         const formData = {
+            class_id: document.getElementsByClassName('class_id')[2].value,
             class_regiter: dataget
         };
         fetch('/teacher/give_point', {
@@ -331,13 +217,15 @@
                 return response.json();
         })
         .then(data => {
-            data = data.data;
-            document.getElementById('result').innerHTML = "Đã gửi thành công";
+            document.getElementById('result').innerHTML = data.message;
             console.log(data);
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
         });
+    }
+    function checkUpdate(input) {
+        input.cells[4].textContent = "update";
     }
 </script>
 
