@@ -25,13 +25,13 @@ You should see the version of node you just installed.
 # Set up your database with PostgreSql
 ###  Installation Steps
 
-1. **Create your database with name** <span style="font-weight: bold;color:red">school_manage </span>
+1. **Create your database with name** <strong style="font-weight: bold;color:red">school_manage</strong>
 
 2. **Open a command-line / terminal window (cmd) and move to the bin directory of your postgres** EX: cd C:\Program files\...\Postgres\16\bin\
 
 3. **Connect to the “school_manage” database on postgres server using superuser account “postgres”, and execute the command in sql file to import the “school_manage” database:** psql -d school_manage -U postgres -f [path/] manual\school.sql
 
-#### <span style="color:rgb(193, 138, 57);">NOTE</span>
+#### <div style="color:rgb(193, 138, 57);">NOTE</div>
 - **Data main of database in file > manual\school.sql**
 
 - **You can change these lines so that the server can connect to your database.**
@@ -44,7 +44,7 @@ You should see the version of node you just installed.
 ###  Installation Steps
 
 1. **Open a terminal window(cmd) and move to the main file school managemet \path\\"school manage" or if you have a vscode simply open the folder**
-2. **Run you server by comand** <span style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node index.js</span>.
+2. **Run you server by comand** <div style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node index.js</div>.
 
 **If your terminal log like this it success**:
 
