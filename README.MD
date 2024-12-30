@@ -1,6 +1,7 @@
 ﻿
 ![image](./manual/image/head.png)
 <hr>
+
 # Install Node.js on Windows
 ###  Installation Steps
 
