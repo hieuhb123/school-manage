@@ -54,3 +54,4 @@ You should see the version of node you just installed.
 3. **Open you browser and type in url => localhost:3000**
 
 ![image](./manual/image/success.png)
+
