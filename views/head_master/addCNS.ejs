@@ -92,7 +92,7 @@
                 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div class="d-flex justify-content-between">
                         <h1 style="width: auto;" class="class_id h2"></h1>
-                        <button type="button" class="btn btn-danger" onclick="deleteClass()">Xóa lớp</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteClass();showInfoClass(curClass);">Xóa lớp</button>
                     </div>
                     <div class="d-flex flex-row align-items-center mt-1"><span style="width: 90px;">Mã giáo viên:</span> <input type="text" name="input_1" class="form-control m-1 lecturer"></div>
                     <div class="d-flex flex-row align-items-center mt-1"><span style="width: 90px;">Phòng:</span> <input type="text" name="input_1" class="form-control m-1 room"></div>
@@ -119,7 +119,7 @@
                                 </td>
                                 <td><input type="time" name="input_1"></td>
                                 <td><input type="time" name="input_1"></td>
-                                <td class="m-0 p-0 border-bottom-0" type="button" onclick="addtime()"><img  src="../images/icon/plus-square-fill.svg" alt="Icon" width="47.6" height="47.6"></td>
+                                <td class="m-0 p-0 border-bottom-0" type="button" onclick="addtime();showInfoClass(curClass);"><img  src="../images/icon/plus-square-fill.svg" alt="Icon" width="47.6" height="47.6"></td>
                             </tr>
                         </thead>
                     </table>
@@ -141,7 +141,7 @@
                             <td><input type="text" name="input_2" class="form-control"></td>
                             <td><input type="text" name="input_2" class="form-control"></td>
                             <td><input type="text" name="input_2" class="form-control"></td>
-                            <td style="width: 170px;"><button type="button" class="btn btn-info" onclick="registerTeach()">Thêm thông tin lớp</button></td>
+                            <td style="width: 170px;"><button type="button" class="btn btn-info" onclick="registerTeach();showInfoClass(document.getElementById('curClass_2').textContent);">Thêm thông tin lớp</button></td>
                         </tr>
                     </tbody>
                 </table>

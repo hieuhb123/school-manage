@@ -7,20 +7,20 @@ import session from "express-session";
 const app = express();
 const port = 3000;
 
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "school_manage",
-  password: "admin",
-  port: 5432,
-});
 // const db = new pg.Client({
 //   user: "postgres",
-//   host: "26.131.209.50",
-//   database: "HUST",
+//   host: "localhost",
+//   database: "school_manage",
 //   password: "admin",
 //   port: 5432,
 // });
+const db = new pg.Client({
+  user: "postgres",
+  host: "26.131.209.50",
+  database: "HUST",
+  password: "admin",
+  port: 5432,
+});
 
 db.connect();
 
@@ -540,7 +540,7 @@ app.post("/teacher/get_class_give_point", async (req, res) => {
       FROM class_information \
       WHERE semester_id = $1 AND clazz_id = $2;", [getSemester_id, req.body.class_id]);
     const getStudentInfo = await db.query(" \
-      SELECT s.student_name, s.student_id, midpoint, finalpoint \
+      SELECT DISTINCT s.student_name, s.student_id, midpoint, finalpoint \
       FROM class_information ci \
       JOIN enroll e USING (clazz_id) \
       JOIN student s USING (student_id) \
