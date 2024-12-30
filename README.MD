@@ -25,7 +25,7 @@ You should see the version of node you just installed.
 # Set up your database with PostgreSql
 ###  Installation Steps
 
-1. **Create your database with name** <strong style="font-weight: bold;color:red">school_manage</strong>
+1. **Create your database with name** <strong style="color:red">school_manage</strong>
 
 2. **Open a command-line / terminal window (cmd) and move to the bin directory of your postgres** EX: cd C:\Program files\...\Postgres\16\bin\
 
