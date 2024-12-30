@@ -56,4 +56,4 @@ You should see the version of node you just installed.
 ![image](./manual/image/success.png)
 
 
-<span style="color:blue">some *blue* text</span>.
+$${\color{red}Welcome
