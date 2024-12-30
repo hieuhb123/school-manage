@@ -55,5 +55,3 @@ You should see the version of node you just installed.
 
 ![image](./manual/image/success.png)
 
-
-$${\color{red}Welcome \space \color{lightblue}To \space \color{orange}Stackoverflow}$$
