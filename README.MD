@@ -44,7 +44,7 @@ You should see the version of node you just installed.
 ###  Installation Steps
 
 1. **Open a terminal window(cmd) and move to the main file school managemet \path\\"school manage" or if you have a vscode simply open the folder**
-2. **Run you server by comand** <div style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node index.js</div>.
+2. **Run you server by comand** <strong style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node index.js</strong>.
 
 **If your terminal log like this it success**:
 
