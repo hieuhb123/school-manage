@@ -73,16 +73,18 @@ app.get("/student/profile", async (req, res) => {
     let get_CPA = await db.query(" \
       SELECT SUM(credit) AS cumulative_credits, ROUND((SUM(credit * four_scale) / SUM(credit)), 2) AS CPA \
       FROM subject_grades_of_students \
-      WHERE student_id = $1 AND semester_id < $2;", [req.session.user.student_id, getSemester_id]);
+      WHERE student_id = $1 AND semester_id <= $2;", [req.session.user.student_id, getSemester_id]);
     let get_GPA = await db.query(" \
       SELECT semester_id, gpa \
       FROM calculate_gpa \
-      WHERE student_id = $1;", [req.session.user.student_id]);
+      WHERE student_id = $1 \
+      ORDER BY semester_id;", [req.session.user.student_id]);
     let get_conduct_point = await db.query(" \
       SELECT semester_id, formteacher_name, conduct_point \
       FROM give_conduct_point \
       JOIN form_teacher USING (formteacher_id) \
-      WHERE student_id = $1;", [req.session.user.student_id]);
+      WHERE student_id = $1 \
+      ORDER BY semester_id;", [req.session.user.student_id]);
     let get_headmaster = await db.query(" \
       SELECT formteacher_name \
       FROM give_conduct_point \
@@ -117,7 +119,8 @@ app.get("/student/result", async (req, res) => {
       SELECT semester_id, t1.subject_id, subject_name, t1.credit, class_point, four_scale, alphabet_point \
       FROM subject_grades_of_students t1 \
       JOIN subject USING (subject_id) \
-      WHERE student_id = $1 AND semester_id < $2;", [req.session.user.student_id, getSemester_id]);
+      WHERE student_id = $1 AND semester_id < $2 \
+      ORDER BY semester_id;", [req.session.user.student_id, getSemester_id]);
     res.render("student/result.ejs", {
       currentPage: curPage,
       user: req.session.user,
@@ -135,10 +138,12 @@ app.get("/student/register-class", async (req, res) => {
       FROM enroll e \
       JOIN class_information ci USING (clazz_id, semester_id) \
       JOIN subject USING(subject_id) \
-      WHERE student_id = $1 AND semester_id = $2;", [req.session.user.student_id, getNextSemester(getSemester_id)]);
+      WHERE student_id = $1 AND semester_id = $2 \
+      ORDER BY dow, start_time;", [req.session.user.student_id, getNextSemester(getSemester_id)]);
     res.render("student/register-class.ejs", {
       currentPage: curPage,
       user: req.session.user,
+      semester: getNextSemester(getSemester_id),
       class_rg: getClassRegised.rows
     });
   }
@@ -171,7 +176,8 @@ app.get("/student/schedule", async(req, res) => {
       FROM enroll e \
       JOIN class_information ci USING (clazz_id, semester_id) \
       JOIN subject s USING (subject_id) \
-      WHERE student_id = $1 AND semester_id = $2;", [req.session.user.student_id, getSemester_id]);
+      WHERE student_id = $1 AND semester_id = $2 \
+      ORDER BY dow, start_time;", [req.session.user.student_id, getSemester_id]);
     res.render("student/schedule.ejs", {
       currentPage: curPage,
       user: req.session.user,
@@ -207,7 +213,8 @@ app.get("/teacher/schedule", async (req, res) => {
     const getSchedule = await db.query("\
       SELECT clazz_id, subject_id, subject_name, dow, start_time, finish_time, room \
       FROM class_information \
-      WHERE lecturer_id = $1 AND semester_id = $2;", [req.session.user.lecturer_id, getSemester_id]);
+      WHERE lecturer_id = $1 AND semester_id = $2 \
+      ORDER BY dow, start_time;", [req.session.user.lecturer_id, getSemester_id]);
     res.render("teacher/schedule.ejs", {
       currentPage: curPage,
       user: req.session.user,
@@ -228,19 +235,8 @@ app.get("/teacher/give_point", async (req, res) => {
     res.render("teacher/point.ejs", {
       currentPage: curPage,
       user: req.session.user,
+      semester: getSemester_id,
       class_teach: getClass.rows 
-    });
-  }
-});
-
-app.get("/teacher/register-class", (req, res) => {
-  if(!req.session.user)
-      res.redirect("/");
-  else {
-    curPage = 'Service';
-    res.render("teacher/class.ejs", {
-      currentPage: curPage,
-      user: req.session.user
     });
   }
 });
@@ -390,6 +386,49 @@ app.get("/head_master/addSC", async (req, res) => {
   }
 });
 
+app.get("/head_master/addCNS", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = 'Service';
+    const getSub = await db.query("\
+      SELECT s.subject_id, s.subject_name \
+      FROM subject s\
+      WHERE institute_id = $1 \
+      ORDER BY subject_id ASC ", [req.session.user.institute_id]);
+    for(let i = 0; i < getSub.rows.length ; i++) {
+      const getClass = await db.query("\
+        SELECT clazz_id \
+        FROM clazz \
+        WHERE subject_id = $1;", [getSub.rows[i].subject_id]);
+      getSub.rows[i].clazz = getClass.rows;
+    }
+    res.render("head_master/addCNS.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      semester: getNextSemester(getSemester_id),
+      subInfo: getSub.rows
+    });
+  }
+});
+
+app.get("/admin/addSemester", async (req, res) => {
+  if(!req.session.user)
+      res.redirect("/");
+  else {
+    curPage = 'Service';
+    const getSes = await db.query("\
+      SELECT * \
+      FROM semester s \
+      ORDER BY semester_id ASC");
+    res.render("admin/semester.ejs", {
+      currentPage: curPage,
+      user: req.session.user,
+      ses: getSes.rows
+    });
+  }
+});
+
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
@@ -408,7 +447,22 @@ app.post("/login", async (req, res) => {
     const password = req.body.password;
     const typeLogin = req.body.listGroupRadios;
     let user_data;
-    try {
+    if(typeLogin == 'admin') {
+      if(username == 'admin') {
+        if(password == 'admin') {
+          user_data = {typeLogin: typeLogin};
+          req.session.user = user_data;
+          res.redirect("/");
+        }
+        else {
+          res.render("login.ejs", {status: 'Incorrect Password'});
+        }
+      }
+      else {
+        res.render("login.ejs", {status: 'User not found'});
+      }
+    }
+    else try {
       let getUsername;
       if(typeLogin === 'sv') getUsername = await db.query("SELECT * FROM student WHERE username = $1", [username]);
       else if(typeLogin == 'gv') getUsername = await db.query("SELECT * FROM lecturer WHERE username = $1", [username]);
@@ -491,7 +545,9 @@ app.post("/teacher/get_class_give_point", async (req, res) => {
       JOIN enroll e USING (clazz_id) \
       JOIN student s USING (student_id) \
       WHERE lecturer_id = $1 AND e.semester_id = $2 AND clazz_id = $3;", [req.session.user.lecturer_id, getSemester_id, req.body.class_id]);
-    res.json({class_info: getClassInfo.rows[0], student_info: getStudentInfo.rows});
+    res.json({
+      class_info: getClassInfo.rows[0], 
+      student_info: getStudentInfo.rows});
   }
   catch(err) {
     console.log(err);
@@ -550,6 +606,99 @@ app.post("/head_master/insertClass", async (req, res) => {
       INSERT INTO clazz(clazz_id, subject_id) \
       VALUES ($1, $2);", [req.body.clazz_id, req.body.subject_id]);
     res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+
+app.post("/head_master/get_class", async (req, res) => {
+  try {
+    const get_teach_info = await db.query(" \
+      SELECT * \
+      FROM teach \
+      WHERE clazz_id = $1 AND semester_id = $2;", [req.body.class_id, getNextSemester(getSemester_id)]);
+    if(get_teach_info.rows.length > 0) {
+      const get_time = await db.query(" \
+        SELECT dow, start_time, finish_time \
+        FROM class_information \
+        WHERE clazz_id = $1 AND semester_id = $2;", [req.body.class_id, getNextSemester(getSemester_id)]);
+      res.json({ typeInfo: 'have_Teach', teach: get_teach_info.rows[0], time: get_time.rows});
+    }
+    else
+      res.json({typeInfo: 'nothave_Teach'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+
+app.post("/head_master/insert_Teach", async (req, res) => {
+  try {
+    await db.query(" \
+      INSERT INTO teach(clazz_id, semester_id, lecturer_id, room, max_student) \
+      VALUES ($1, $2, $3, $4, $5);", [req.body.clazz_id, getNextSemester(getSemester_id), req.body.lecturer_id, req.body.room, req.body.max_student]);
+    res.json({ message: 'Thêm thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+app.post("/head_master/delete_Teach", async (req, res) => {
+  try {              
+    await db.query(" \
+      DELETE FROM teach \
+      WHERE clazz_id = $1 AND semester_id = $2;", [req.body.clazz_id, getNextSemester(getSemester_id)]);
+    res.json({ message: 'Xóa thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+});
+app.post("/head_master/insert_Time", async (req, res) => {
+  try {
+    await db.query(" \
+      INSERT INTO class_information(clazz_id, semester_id, dow, start_time, finish_time) \
+      VALUES ($1, $2, $3, $4, $5);", [req.body.clazz_id, getNextSemester(getSemester_id), req.body.dow, req.body.start_time, req.body.finish_time]);
+    res.json({ message: 'Thêm thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+});
+app.post("/head_master/delete_Time", async (req, res) => {
+  try {              
+    await db.query(" \
+      DELETE FROM study_time \
+      WHERE clazz_id = $1 AND semester_id = $2 AND dow = $3 AND start_time = $4 AND finish_time = $5;", [req.body.clazz_id, getNextSemester(getSemester_id), req.body.dow, req.body.start_time, req.body.finish_time]);
+    res.json({ message: 'Xóa thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+});
+app.post("/admin/insert-semester", async (req, res) => {
+  try {
+    await db.query(" \
+      INSERT INTO semester(semester_id, start_enroll_time, finish_enroll_time, start_givepoint_time, finish_givepoint_time, start_semester_date, finish_semester_date) \
+      VALUES ($1, $2, $3, $4, $5, $6, $7);", [req.body.semester_id, req.body.start_enroll_time, req.body.finish_enroll_time, req.body.start_givepoint_time, req.body.finish_givepoint_time, req.body.start_semester_date, req.body.finish_semester_date]);
+    res.json({ message: 'Cập nhật thành công'});
+  }
+  catch (err) {
+    res.json({ message: err.message});
+  }
+  
+});
+
+app.post("/admin/delete-semester", async (req, res) => {
+  try {
+    await db.query(" \
+      DELETE FROM semester \
+      WHERE semester_id = $1;", [req.body.semester_id]);
+    res.json({ message: 'Deleted'});
   }
   catch (err) {
     res.json({ message: err.message});

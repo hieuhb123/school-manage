@@ -1,0 +1,117 @@
+<%- include('../partials/header') %>
+<style>
+
+</style>
+<div class="container text-center mb-5">
+    <h1>Thời khóa biểu</h1>
+    <hr>
+    <div class="table-responsive small">
+        <table class="table table-striped-columns table-sm mb-0">
+            <thead>
+                <tr class="table-info">
+                    <th scope="col">Mã kì học</th>
+                    <th scope="col">TG bắt đầu kì</th>
+                    <th scope="col">TG kết thúc kì</th>
+                    <th scope="col">TG bắt đầu đăng kì</th>
+                    <th scope="col">TG kêt thúc đăng kì</th>
+                    <th scope="col">TG bắt đầu cho điểm</th>
+                    <th scope="col">TG kết thúc cho điểm</th>
+                </tr>
+            </thead>
+            <tbody>
+            <%for(var i = 0 ; i < ses.length ; i++) {%>
+                <tr>
+                    <td><%=ses[i].semester_id%></td>
+                    <td><%=ses[i].start_semester_date.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><%=ses[i].finish_semester_date.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><%=ses[i].start_enroll_time.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><%=ses[i].finish_enroll_time.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><%=ses[i].start_givepoint_time.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><%=ses[i].finish_givepoint_time.toJSON().slice(0,10).replace(/-/g,'/')%></td>
+                    <td><button type="button" class="btn btn-danger" onclick="deleteRow(this)"><img style="filter: invert(1); " src="../images/icon/trash3.svg" alt="Icon" width="16" height="16"></button></td>
+                </tr>
+            <%}%>
+            <tr>
+                <td><input style="width: 75px;" type="text" name="input" class="form-control"></td>
+                <td><input style="width: 135px;" type="date" name="input" class="form-control"></td>
+                <td><input style="width: 135px;" type="date" name="input" class="form-control"></td>
+                <td><input style="width: 200px;" type="datetime-local" name="input" class="form-control"></td>
+                <td><input style="width: 200px;" type="datetime-local" name="input" class="form-control"></td>
+                <td><input style="width: 200px;" type="datetime-local" name="input" class="form-control"></td>
+                <td><input style="width: 200px;" type="datetime-local" name="input" class="form-control"></td>
+            </tr>
+            <tr>
+                <td class="mt-4" colspan="7"><button style="width: 200px;" type="button" class="btn btn-success" onclick="submit()">Submit</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="result"></div>
+</div>
+
+<script>
+    function submit() {
+        const formData = {
+            semester_id: document.getElementsByName('input')[0].value, 
+            start_enroll_time: document.getElementsByName('input')[3].value, 
+            finish_enroll_time: document.getElementsByName('input')[4].value, 
+            start_givepoint_time: document.getElementsByName('input')[5].value, 
+            finish_givepoint_time: document.getElementsByName('input')[6].value, 
+            start_semester_date: document.getElementsByName('input')[1].value, 
+            finish_semester_date: document.getElementsByName('input')[2].value
+        };
+        console.log(formData);
+        fetch('/admin/insert-semester', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result').innerHTML = data.message;
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    
+    function deleteRow(button) {
+        const isConfirmed = confirm("Bạn có chắc chắn muốn xóa mục này?");
+        if (isConfirmed) {
+            button.classList.add('disabled');
+            const formData = {
+                semester_id: button.closest("tr").cells[0].textContent
+            }
+            fetch('/admin/delete-semester', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                    return response.json();
+            })
+            .then(data => {
+                button.textContent = data.message;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+      }
+    }
+</script>
+
+<%- include('../partials/footer') %>

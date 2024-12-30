@@ -1,0 +1,337 @@
+<%- include('../partials/header') %>
+<style>
+    .container{
+        padding: 0 0 0 0;
+    }
+    .bi {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    }
+
+    /*
+    * Sidebar
+    */
+
+    @media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+    .navbar-search {
+        display: block;
+    }
+    }
+
+    .sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    }
+
+    .sidebar .nav-link.active {
+    color: #2470dc;
+    }
+
+    .sidebar-heading {
+    font-size: .75rem;
+    }
+
+    /*
+    * Navbar
+    */
+
+    .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    }
+
+    .navbar .form-control {
+    padding: .75rem 1rem;
+    }
+    .btn {
+        border: 0;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row" style="min-height: 60vh;">
+        <div class="sidebar border border-right col-md-3 col-lg-3 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3">
+                    <h6 class="sd-flex justify-content-between align-items-center px-3 mb-1">
+                        <ul class="nav flex-column mb-auto">
+                            <li class="my-1">
+                                <h4>Danh sách môn sẽ mở kì <%=semester%></h4> 
+                            </li>
+                        </ul>
+                    </h6>
+                    <ul class="nav flex-column mb-auto list-group" id="classlist">
+                        <%for(let i = 0 ; i < subInfo.length ; i++) {%>
+                            <div class="list-group-item list-group-item-light">
+                                <button style="width: 100%;" class="btn text-start" type="button" data-bs-toggle="collapse" data-bs-target="#<%=subInfo[i].subject_id%>" aria-expanded="false" aria-controls="collapseExample">
+                                    <%=subInfo[i].subject_name +" ( "+ subInfo[i].subject_id+" )"%>
+                                </button>
+                                
+                                <ul class="collapse" id="<%=subInfo[i].subject_id%>">
+                                    <%for(let j = 0 ; j < subInfo[i].clazz.length ; j++) {%>
+                                        <li class="card dropdown-menu m-0 p-0"><button onclick="showInfoClass(<%-subInfo[i].clazz[j].clazz_id%>);selectButton(this);" class="dropdown-item rounded-2"><%=subInfo[i].clazz[j].clazz_id%></button></li>
+                                    <%}%>
+                                </ul>
+                            </div>
+                        <%}%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+  
+        <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4 mb-4">
+            <div id="info_1" style="display: none">
+                <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div class="d-flex justify-content-between">
+                        <h1 style="width: auto;" class="class_id h2"></h1>
+                        <button type="button" class="btn btn-danger" onclick="deleteClass()">Xóa lớp</button>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mt-1"><span style="width: 90px;">Mã giáo viên:</span> <input type="text" name="input_1" class="form-control m-1 lecturer"></div>
+                    <div class="d-flex flex-row align-items-center mt-1"><span style="width: 90px;">Phòng:</span> <input type="text" name="input_1" class="form-control m-1 room"></div>
+                    <div class="d-flex flex-row align-items-center mt-1"><span style="width: 90px;">Số lượng học sinh:</span> <input type="number" name="input_1" class="form-control m-1 max_student"></div>
+                </div>
+                <h3>Thời gian học</h3>
+                <div class="table-responsive small">
+                    <table id="t1" class="table table-striped-columns table-sm mb-0">
+                        <thead>
+                            <tr class="table-info">
+                                <th scope="col">Thứ</th>
+                                <th scope="col">Thời gian bắt đầu</th>
+                                <th scope="col">Thời gian kết thúc</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select name="input_1" class="form-select" aria-label="Default select example">
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                    </select>
+                                </td>
+                                <td><input type="time" name="input_1"></td>
+                                <td><input type="time" name="input_1"></td>
+                                <td class="m-0 p-0 border-bottom-0" type="button" onclick="addtime()"><img  src="../images/icon/plus-square-fill.svg" alt="Icon" width="47.6" height="47.6"></td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div id="result_1"></div>
+            </div>
+            <div id="info_2" style="display: none">
+                <h2>Lớp <span id="curClass_2"></span> chưa được mở vào kỳ <%=semester%></h2>
+                <table id="t1" class="table table-striped-columns table-sm mb-0">
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">Mã giáo viên</th>
+                            <th scope="col">Phòng học</th>
+                            <th scope="col">Số lượng học sinh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" name="input_2" class="form-control"></td>
+                            <td><input type="text" name="input_2" class="form-control"></td>
+                            <td><input type="text" name="input_2" class="form-control"></td>
+                            <td style="width: 170px;"><button type="button" class="btn btn-info" onclick="registerTeach()">Thêm thông tin lớp</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="result_2"></div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    let curClass;
+    function showInfoClass(id) {
+        document.getElementById('info_1').style.display = "none";
+        document.getElementById('info_2').style.display = "none";
+        document.getElementById('result_2').innerHTML = "";
+        const table = document.getElementById('t1');
+        while (table.rows.length > 2) 
+            table.deleteRow(2);
+
+        const formData = {
+            class_id: id
+        };
+        fetch('/head_master/get_class', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            if(data.typeInfo == 'have_Teach') {
+                curClass = data.teach.clazz_id;
+                document.getElementById('info_1').style.display = "";
+                document.getElementsByClassName('class_id')[0].textContent ='Lớp ' + data.teach.clazz_id + ' kỳ ' + data.teach.semester_id;
+                document.getElementsByClassName('lecturer')[0].value = data.teach.lecturer_id;
+                document.getElementsByClassName('room')[0].value = data.teach.room;
+                document.getElementsByClassName('max_student')[0].value = data.teach.max_student;
+                for(let i = 0; i < data.time.length; i++){
+                    let newRow = table.insertRow(-1);
+                    let cell0 = newRow.insertCell(0);
+                    let cell1 = newRow.insertCell(1);
+                    let cell2 = newRow.insertCell(2);
+                    let cell3 = newRow.insertCell(3);
+                    cell0.innerHTML = data.time[i].dow;
+                    cell1.innerHTML = data.time[i].start_time;
+                    cell2.innerHTML = data.time[i].finish_time;
+                    cell3.innerHTML = `<img style="filter: invert(1); " src="../images/icon/trash3.svg" alt="Icon" width="40" height="40">`;
+                    cell3.setAttribute("type", "button");
+                    cell3.setAttribute("class", "m-0 p-0 border-bottom-0 btn btn-danger");
+                    cell3.setAttribute("onclick", "removeTime(this)");
+                }
+            }
+            else if(data.typeInfo == 'nothave_Teach') {
+                document.getElementById('curClass_2').textContent = id;
+                document.getElementById('info_2').style.display = "";
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+    function registerTeach() {
+        const input = document.getElementsByName('input_2');
+        const formData = {
+            clazz_id: document.getElementById('curClass_2').textContent,
+            lecturer_id: input[0].value, 
+            room: input[1].value, 
+            max_student: input[2].value
+        };
+        fetch('/head_master/insert_Teach', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result_2').innerHTML = data.message;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+    function addtime() {
+        const input = document.getElementsByName('input_1');
+        const formData = {
+            clazz_id: curClass,
+            dow: input[3].value, 
+            start_time: input[4].value, 
+            finish_time: input[5].value
+        };
+        fetch('/head_master/insert_Time', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+        if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+                return response.json();
+        })
+        .then(data => {
+            document.getElementById('result_1').innerHTML = data.message;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+    function removeTime(button) {
+        const isConfirmed = confirm("Bạn có chắc chắn muốn xóa mục này?");
+        if (isConfirmed) {
+            button.classList.add('disabled');
+            const formData = {
+                clazz_id: curClass,
+                dow: button.closest("tr").cells[0].textContent, 
+                start_time: button.closest("tr").cells[1].textContent, 
+                finish_time: button.closest("tr").cells[2].textContent
+            }
+            fetch('/head_master/delete_Time', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                    return response.json();
+            })
+            .then(data => {
+                document.getElementById('result_1').innerHTML = data.message;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+      }
+    }
+    function deleteClass() {
+        const isConfirmed = confirm("Bạn có chắc chắn muốn xóa mục này?");
+        if (isConfirmed) {
+            const formData = {
+                clazz_id: curClass
+            }
+            fetch('/head_master/delete_Teach', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                    return response.json();
+            })
+            .then(data => {
+                document.getElementById('result_1').innerHTML = data.message;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+      }
+    }
+    function selectButton(button) {
+
+        let buttons = document.querySelectorAll('#classlist button');
+        
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        button.classList.add('active');
+
+    }
+</script>
+
+<%- include('../partials/footer') %>
