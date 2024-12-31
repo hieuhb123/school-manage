@@ -5,7 +5,6 @@
 SELECT ci.clazz_id, ci.subject_id, subject_name, dow, start_time, finish_time, room
 FROM enroll e
 JOIN class_information ci USING (clazz_id, semester_id)
-JOIN subject s USING (subject_id)
 WHERE student_id = $1 AND semester_id = $2
 ORDER BY dow, start_time;
 
@@ -21,11 +20,17 @@ ORDER BY semester_id;
 -- Bảng đăng kí lớp trong kì hiện tại (ở chức năng đăng kí tín chỉ)
 -- input: student, semester
 -- Các trường: mã lớp, mã học phần, trạng thái đăng kí, tín chỉ, địa điểm học, thời gian học
-SELECT DISTINCT ci.clazz_id, subject_id, 'Thành công' AS status, room, start_time, finish_time
+SELECT ci.clazz_id, subject_id, 'Thành công' AS status, room, start_time, finish_time, dow
 FROM enroll e
 JOIN class_information ci USING (clazz_id, semester_id)
 WHERE student_id = $1 AND semester_id = $2
 ORDER BY dow, start_time;
+
+--Lấy thông tin của lớp đăng kí
+SELECT ci.clazz_id, ci.subject_name, subject_id, 'Insert' AS status, credit, room, start_time, finish_time, dow 
+FROM class_information ci 
+JOIN subject USING(subject_id) 
+WHERE ci.clazz_id = $1 AND semester_id = $2;
 
 -- Thêm một lớp vào bảng đăng kí học phần
 -- input: clazz_id, semester_id, student_id
@@ -42,7 +47,6 @@ WHERE student_id = $1 AND semester_id = $2 AND clazz_id = $3;
 -- Các trường: mã lớp, mã học phần, tên học phần, số lượng đăng kí hiện tại và tối đa, thứ, phòng học, thời gian
 SELECT ci.clazz_id, ci.subject_id, s.subject_name, current_student_number, max_student, dow, room, start_time, finish_time
 FROM class_information ci
-JOIN subject s USING (subject_id)
 WHERE semester_id = $1;
 
 -- Lấy thông tin sinh viên (chia làm 3 câu lệnh)
@@ -139,11 +143,11 @@ JOIN subject USING (subject_id)
 WHERE lecturer_id = $1 AND semester_id = $2;
 -- Step (2): Khi nhấn vào các lớp thì sẽ hiện ra danh sách sinh viên
 -- input: lecturer_id, semester_id, class_id
-SELECT s.student_id, student_name, midpoint, finalpoint
+SELECT DISTINCT s.student_id, student_name, midpoint, finalpoint
 FROM class_information
-JOIN enroll USING (clazz_id)
+JOIN enroll e USING (clazz_id)
 JOIN student s USING (student_id)
-WHERE lecturer_id = $1 AND semester_id = $2 AND clazz_id = $3;
+WHERE lecturer_id = $1 AND e.semester_id = $2 AND clazz_id = $3;
 
 -- Chấm điểm cho sinh viên
 -- Step (1): hiện danh sách các lớp ở kì hiện tại
