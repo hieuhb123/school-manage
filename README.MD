@@ -34,6 +34,7 @@ You should see the version of node you just installed.
 3. **Windows Users:** If you see a pop up asking for permission to run the installer, select YES.
 
 ![image](./manual/image/postgres1.png)
+
 4. Click **Next** to continue through the installer, until you reach this pane and make sure that everything is selected especially **pgAdmin**.
 
 ![image](./manual/image/postgres2.png)
