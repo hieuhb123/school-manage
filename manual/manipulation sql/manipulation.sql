@@ -2,11 +2,12 @@
 -- Thời khóa biểu của sinh viên
 -- input: student_id, semester_id
 -- Các trường: mã lớp, mã học phần, tên học phần, thứ, thời gian, phòng học
-SELECT ci.clazz_id, ci.subject_id, s.subject_name, dow, start_time, finish_time, room
+SELECT ci.clazz_id, ci.subject_id, subject_name, dow, start_time, finish_time, room
 FROM enroll e
 JOIN class_information ci USING (clazz_id, semester_id)
 JOIN subject s USING (subject_id)
-WHERE student_id = $1 AND semester_id = $2;
+WHERE student_id = $1 AND semester_id = $2
+ORDER BY dow, start_time;
 
 -- Bảng điểm của học sinh
 -- input: student_id
@@ -14,16 +15,17 @@ WHERE student_id = $1 AND semester_id = $2;
 SELECT semester_id, t1.subject_id, subject_name, t1.credit, class_point, four_scale, alphabet_point
 FROM subject_grades_of_students t1
 JOIN subject USING (subject_id)
-WHERE student_id = $1;
+WHERE student_id = $1
+ORDER BY semester_id;
 
--- Bảng đăng kí học phần trong kì hiện tại (ở chức năng đăng kí tín chỉ)
+-- Bảng đăng kí lớp trong kì hiện tại (ở chức năng đăng kí tín chỉ)
 -- input: student, semester
 -- Các trường: mã lớp, mã học phần, trạng thái đăng kí, tín chỉ, địa điểm học, thời gian học
-SELECT ci.clazz_id, subject_id, 'Thành công' AS status, credit, room, start_time, finish_time, dow
+SELECT DISTINCT ci.clazz_id, subject_id, 'Thành công' AS status, room, start_time, finish_time
 FROM enroll e
 JOIN class_information ci USING (clazz_id, semester_id)
-JOIN subject USING(subject_id)
-WHERE student_id = $1 AND semester_id = $2;
+WHERE student_id = $1 AND semester_id = $2
+ORDER BY dow, start_time;
 
 -- Thêm một lớp vào bảng đăng kí học phần
 -- input: clazz_id, semester_id, student_id
@@ -73,7 +75,8 @@ WHERE student_id = $1 AND semester_id < $2;
 SELECT semester_id, formteacher_name, conduct_point
 FROM give_conduct_point
 JOIN form_teacher USING (formteacher_id)
-WHERE student_id = $1;
+WHERE student_id = $1
+ORDER BY semester_id;
 
 -- Xem thông tin giáo viên chủ nhiệm kỳ hiện tại
 -- input: student_id, semester
@@ -93,7 +96,8 @@ WHERE student_id = $1 AND semester_id = $2;
 -- input: student_id
 SELECT semester_id, gpa
 FROM calculate_gpa
-WHERE student_id = $1;
+WHERE student_id = $1
+ORDER BY semester_id;
 
 -- Chỉnh sửa thông tin cá nhân
 
@@ -114,10 +118,11 @@ WHERE lecturer_id = $1;
 
 -- Lấy thời khóa biểu của giáo viên theo kì (liệt kê các class trong 1 kỳ)
 -- input: lecturer_id, semester_id
-SELECT clazz_id, s.subject_id, s.subject_name, dow, start_time, finish_time, room
+SELECT clazz_id, s.subject_id, subject_name, dow, start_time, finish_time, room
 FROM class_information
 JOIN subject s USING (subject_id)
-WHERE lecturer_id = $1 AND semester_id = $2;
+WHERE lecturer_id = $1 AND semester_id = $2
+ORDER BY semester_id;
 
 -- Xem điểm các sinh viên của một lớp mà mình phụ trách
 -- Step (1): hiện danh sách các lớp theo kỳ
@@ -125,6 +130,12 @@ WHERE lecturer_id = $1 AND semester_id = $2;
 SELECT clazz_id, s.subject_id, subject_name
 FROM class_information
 JOIN subject s USING (subject_id)
+WHERE lecturer_id = $1 AND semester_id = $2;
+
+SELECT te.clazz_id, cl.subject_id, subject_name
+FROM teach te
+JOIN clazz cl USING (clazz_id)
+JOIN subject USING (subject_id)
 WHERE lecturer_id = $1 AND semester_id = $2;
 -- Step (2): Khi nhấn vào các lớp thì sẽ hiện ra danh sách sinh viên
 -- input: lecturer_id, semester_id, class_id
@@ -192,11 +203,11 @@ WHERE headmaster_id = $1;
 
 -- Thêm một môn học
 -- LƯU Ý: institute_id của subject được chèn thêm giống với institute của headmaster
-INSERT INTO subject(subject_id, subject_name, credit, institute_id,final_coefficient) 
-VALUES (..., ..., ...,..., ...);
+INSERT INTO subject(subject_id, subject_name, credit, finalcoeffi) 
+VALUES (..., ..., ..., ...);
 
 -- Thêm các lớp cho môn học
-INSERT INTO clazz(clazz_id, subject_id)
+INSERT INTO clazz(clazz_id, subject)
 VALUES (..., ...)
 
 
@@ -218,7 +229,7 @@ INSERT INTO teach(clazz_id, semester_id, lecturer_id, room, max_student)
 VALUES (..., ..., ..., ..., ...);
 -- Case 2: Nếu lecturer đã được thêm cho clazz rồi thì headmaster sẽ nhập thông tin về thời gian
 -- LƯU Ý: Một lớp có thể có nhiều thời gian học trong 1 tuần
-INSERT INTO class_information(dow, start_time, finish_time)
+INSERT INTO class_information(clazz_id, semester_id, dow, start_time, finish_time)
 VALUES (..., ..., ...);
 -- Headmaster có thể sửa thông tin cho các lớp học (kỳ kế tiếp)
 UPDATE class_information
@@ -253,7 +264,7 @@ VALUES (..., $1, $2);
 DELETE FROM give_conduct_point
 WHERE student = $1 AND semester_id = $2;
 
----------------------BIG HEAD MASTER-------------------
+---------------------Admin-------------------
 -- Đặt thời gian nhập điểm của giáo viên, thời gian đăng ký lớp của sinh viên
 INSERT INTO semester(semester_id, start_enroll_time, finish_enroll_time, start_givepoint_time, finish_givepoint_time, start_semester_date, finish_semester_date)
 VALUES (..., ..., ..., ..., ..., ..., ...);
