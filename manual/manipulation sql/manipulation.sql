@@ -103,14 +103,6 @@ FROM calculate_gpa
 WHERE student_id = $1
 ORDER BY semester_id;
 
--- Chỉnh sửa thông tin cá nhân
-
--- Xem thông tin cá nhân của lecturer
--- input: class_id, semester_id
-SELECT lecturer_id, lecturer_name, gender, phone_number
-FROM teach
-JOIN lecturer USING (lecturer_id)
-WHERE clazz_id = $1 AND semester_id = $2;
 
 ---------------------LECTURER------------------------
 -- Xem thông tin cá nhân của mình
