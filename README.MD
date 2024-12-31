@@ -1,5 +1,7 @@
 ﻿
 ![image](./manual/image/head.png)
+
+
 <hr>
 
 # Install Node.js
@@ -19,6 +21,31 @@
 
 6. Confirm that Node has been installed successfully on your computer by opening a Hyper terminal and typing in the commands <span style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">`node --version`</span>.
 You should see the version of node you just installed.
+
+<hr>
+
+# Install PostgreSQL and pgAdmin
+### Installation instructions
+1. **Windows Users:** Download the Postgres Installer here:
+    <https://sbp.enterprisedb.com/getfile.jsp?fileid=1258649>
+
+2. Double click on the downloaded file to start the installer.
+
+3. **Windows Users:** If you see a pop up asking for permission to run the installer, select YES.
+
+![image](./manual/image/postgres1.png)
+4. Click **Next** to continue through the installer, until you reach this pane and make sure that everything is selected especially **pgAdmin**.
+
+![image](./manual/image/postgres2.png)
+
+5. Continue clicking **Next** until you reach this screen. Your superuser username is **postgres** and you need to set a password. **Make sure you write this password down**. We will need this later to access our database.
+
+![image](./manual/image/postgres3.png)
+
+6. Continue through the installer, leave everything as the default and just keep clicking **Next**. Once installation completes then you're done you can click **Finish** and you can continue to the next lesson!
+
+#### <div style="color:rgb(193, 138, 57);">NOTE</div>
+- If Stack Builder launches after installation completes, just close it. We will be doing everything from scratch together in the next lesson without using a wizard.
 
 <hr>
 
