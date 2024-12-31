@@ -7,20 +7,20 @@ import session from "express-session";
 const app = express();
 const port = 3000;
 
-// const db = new pg.Client({
-//   user: "postgres",
-//   host: "localhost",
-//   database: "school_manage",
-//   password: "admin",
-//   port: 5432,
-// });
 const db = new pg.Client({
   user: "postgres",
-  host: "26.131.209.50",
-  database: "HUST",
+  host: "localhost",
+  database: "school_manage",
   password: "admin",
   port: 5432,
 });
+// const db = new pg.Client({
+//   user: "postgres",
+//   host: "26.131.209.50",
+//   database: "HUST",
+//   password: "admin",
+//   port: 5432,
+// });
 
 db.connect();
 
