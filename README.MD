@@ -17,7 +17,7 @@
 
 5. **Restart your computer.** You won’t be able to run Node.js® until you restart your computer. 
 
-6. Confirm that Node has been installed successfully on your computer by opening a Hyper terminal and typing in the commands <span style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node --version</span>.
+6. Confirm that Node has been installed successfully on your computer by opening a Hyper terminal and typing in the commands <span style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">`node --version`</span>.
 You should see the version of node you just installed.
 
 <hr>
@@ -25,7 +25,7 @@ You should see the version of node you just installed.
 # Set up your database with PostgreSql
 ###  Installation Steps
 
-1. **Create your database with name <strong style="color:red">school_manage</strong>**
+1. **Create your database with name <strong style="color:red">`school_manage`</strong>**
    
 2. **Open a command-line / terminal window (cmd) and move to the bin directory of your postgres** EX: cd C:\Program files\...\Postgres\16\bin\
 
@@ -44,7 +44,7 @@ You should see the version of node you just installed.
 ###  Installation Steps
 
 1. **Open a terminal window(cmd) and move to the main file school managemet \path\\"school manage" or if you have a vscode simply open the folder**
-2. **Run you server by comand** <strong style="display: inline-block;border: 1px solid #ddd;font-family: monospace;color: #c47500;">node index.js</strong>.
+2. **Run you server by comand `node index.js`** .
 
 **If your terminal log like this it success**:
 
