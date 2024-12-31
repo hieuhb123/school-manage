@@ -5,7 +5,7 @@
 # Install Node.js
 ###  Installation Steps
 
-1. **Download the Windows installer from the [Nodes.js® web site](https://nodejs.org/en).**
+1. **Download the Windows installer from the [Nodes.js® web site](https://nodejs.org/en){:target="_blank"}.**
 2. **Choose the LTS version** that’s shown on the left.
 
 ![image](./manual/image/node1.png)
